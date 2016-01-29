@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="chat_background">#EBF0F0</color>
+    <color name="message_send_background">#6CAFF1</color>
+    <color name="message_receive_background">#FFFFFF</color>
+    <color name="message_time_color">#A1A5A5</color>
+    <color name="chat_box_color">#FAFAFA</color>
+
+    <!--FileSelector-->
+    <color name="tab_header_color">#303F9F</color>
+    <!--FileSelector-->
+
+</resources>

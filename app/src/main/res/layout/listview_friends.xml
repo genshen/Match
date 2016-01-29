@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/friend_list_padding">
+
+    <ImageView
+        android:layout_width="@dimen/contact_width"
+        android:layout_height="@dimen/contact_width"
+        android:src="@drawable/attach_contact"
+        android:contentDescription="@string/image"/>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/user_ip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/friend_list_ip_left_margin"
+            android:layout_marginStart="@dimen/friend_list_ip_left_margin"
+            android:layout_below="@+id/user_name" />
+
+        <TextView
+            android:id="@+id/message_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ChatActivity">
+    <item
+        android:id="@+id/file_record"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_file_record"
+        android:title="@string/ic_file_record"
+        app:showAsAction="always" />
+</menu>

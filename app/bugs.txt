@@ -1,0 +1,4 @@
+1 自己手机开热点，无法发送消息
+2.当前没有网络的时候，UdpReceive线程会异常。
+2.1 退出程序时，socket因为关闭原因会异常
+3.chatActivity的messageListener可能会异常！

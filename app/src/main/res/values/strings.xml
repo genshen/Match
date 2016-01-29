@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Match</string>
+    <string name="action_settings">Settings</string>
+    <string name="image">images</string>
+
+    <string name="inti_fail_port_used">初始化失败,相关端口已经被占用</string>
+    <string name="title_activity_chat">ChatActivity</string>
+
+    <!--chat activity-->
+    <string name="chat_hint">input please!</string>
+    <string name="chat_send">Send</string>
+    <string name="name_i">Hello BubbleTextVew</string>
+    <string name="ic_file_record">传输记录</string>
+    <!--/chat activity-->
+
+    <!--FileSelector-->
+    <string name="file_selector_app">Apps</string>
+    <string name="file_selector_images">Images</string>
+    <string name="file_selector_file">Files</string>
+    <string name="file_selector_app_send">发送</string>
+
+    <string name="dialog_file_selector_send_ack">发送确认</string>
+    <string name="dialog_file_selector_send_ack_message">是否确认发送该文件?</string>
+    <string name="dialog_file_selector_send_ack_yes">确认</string>
+    <string name="dialog_file_selector_send_ack_cancel">取消</string>
+
+    <!--/FileSelector-->
+    <!--文件传送-->
+    <string name="dialog_file_receive_ack">文件接收确认</string>
+    <string name="dialog_file_receive_ack_message">你有待接收的文件，是否接收？</string>
+    <string name="dialog_file_receive_ack_yes">接收</string>
+    <string name="dialog_file_receive_ack_refuse">拒绝</string>
+    <!--/文件传送-->
+    <string name="computer">Web版</string>
+    <string name="title_activity_web">WebActivity</string>
+    <string name="title_activity_file_selector">FileSelector</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_file_record">传输记录</string>
+
+</resources>

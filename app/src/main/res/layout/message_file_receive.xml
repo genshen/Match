@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/message_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/chat_time_margin_top_bottom"
+        android:layout_marginLeft="@dimen/chat_time_margin_left"
+        android:layout_marginStart="@dimen/chat_time_margin_left"
+        android:layout_marginTop="@dimen/chat_time_margin_top_bottom"
+        android:textColor="@color/message_time_color"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:id="@+id/message_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/message_time"
+        android:layout_marginEnd="@dimen/chat_bubble_l_margin_right"
+        android:layout_marginLeft="@dimen/chat_bubble_l_margin_left"
+        android:layout_marginRight="@dimen/chat_bubble_l_margin_right"
+        android:layout_marginStart="@dimen/chat_bubble_l_margin_left"
+        android:background="@color/message_receive_background"
+        android:padding="10dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/file_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:text="@string/name_i"
+            android:textSize="16sp" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/file_icon"
+            android:layout_width="@dimen/message_file_icon_height"
+            android:layout_height="@dimen/message_file_icon_height"
+            android:layout_toRightOf="@+id/file_name"
+            android:src="@drawable/uc_photos" />
+
+    </RelativeLayout>
+    <!--ff4444-->
+</RelativeLayout>
