@@ -16,8 +16,7 @@
         android:textColor="@color/message_time_color"
         android:textSize="14sp" />
 
-    <RelativeLayout
-        android:id="@+id/message_content"
+    <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -27,26 +26,32 @@
         android:layout_marginLeft="@dimen/chat_bubble_l_margin_left"
         android:layout_marginRight="@dimen/chat_bubble_l_margin_right"
         android:layout_marginStart="@dimen/chat_bubble_l_margin_left"
-        android:background="@color/message_receive_background"
-        android:padding="10dp">
+        app:cardBackgroundColor="@color/message_receive_background">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/file_name"
+        <RelativeLayout
+            android:id="@+id/message_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:ellipsize="middle"
-            android:singleLine="true"
-            android:text="@string/name_i"
-            android:textSize="16sp" />
+            android:padding="10dp">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/file_icon"
-            android:layout_width="@dimen/message_file_icon_height"
-            android:layout_height="@dimen/message_file_icon_height"
-            android:layout_toRightOf="@+id/file_name"
-            android:src="@drawable/uc_photos" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:text="@string/name_i"
+                android:textSize="16sp" />
 
-    </RelativeLayout>
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/file_icon"
+                android:layout_width="@dimen/message_file_icon_height"
+                android:layout_height="@dimen/message_file_icon_height"
+                android:layout_toRightOf="@+id/file_name"
+                android:src="@drawable/uc_photos" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
     <!--ff4444-->
 </RelativeLayout>

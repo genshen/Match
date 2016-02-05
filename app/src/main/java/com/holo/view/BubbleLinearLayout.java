@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 
-import com.holo.wifichat.R;
+import com.holo.match.R;
 
 
 /**

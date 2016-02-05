@@ -1,4 +1,4 @@
-package com.holo.wifichat;
+package com.holo.match;
 
 import org.junit.Test;
 

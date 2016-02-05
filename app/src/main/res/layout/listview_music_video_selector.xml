@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_activated"
+    android:padding="@dimen/file_selector_music_padding">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/music_video_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/filesystem_icon_music"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/file_selector_music_image_margin"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/music_video_selector_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/music_video_icon"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/music_video_selector_artist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/music_video_icon"
+        android:layout_below="@+id/music_video_selector_title"
+        android:ellipsize="middle"
+        android:singleLine="true" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/music_video_selector_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/music_video_icon"
+        android:layout_below="@+id/music_video_selector_artist"
+        android:ellipsize="middle"
+        android:singleLine="true" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/music_video_selector_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/music_video_selector_duration"
+        android:layout_below="@+id/music_video_selector_artist"
+        android:layout_marginLeft="@dimen/file_selector_music_size_margin"
+        android:ellipsize="middle"
+        android:singleLine="true" />
+</RelativeLayout>

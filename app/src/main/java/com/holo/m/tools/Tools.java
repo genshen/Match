@@ -94,29 +94,49 @@ public class Tools {
     public static long toLong(byte[] b) {
         long l = b[0];
         l <<= 8;
-        l += b[1]&0xFF;
+        l += b[1] & 0xFF;
         l <<= 8;
-        l += b[2]&0xFF;
+        l += b[2] & 0xFF;
         l <<= 8;
-        l += b[3]&0xFF;
+        l += b[3] & 0xFF;
         l <<= 8;
-        l += b[4]&0xFF;
+        l += b[4] & 0xFF;
         l <<= 8;
-        l += b[5]&0xFF;
+        l += b[5] & 0xFF;
         l <<= 8;
-        l += b[6]&0xFF;
+        l += b[6] & 0xFF;
         l <<= 8;
-        l += b[7]&0xFF;
+        l += b[7] & 0xFF;
         return l;
     }
 
+    public static int toInt(byte[] b, int position) {
+        int r = b[position];
+        r <<= 8;
+        r += b[position + 1] & 0xFF;
+        r <<= 8;
+        r += b[position + 2] & 0xFF;
+        r <<= 8;
+        r += b[position + 3] & 0xFF;
+        return r;
+    }
+
     /**
-     * transform long to byte array
+     * transform long and int to byte array used in BasicFileInformation class
+     *
      * @param l long
      * @return byte[]
      */
-    public static byte[] toByteArray(long l) {
-        byte[] b = new byte[8];
+    public static byte[] toByteArray(long l, int r) {
+        byte[] b = new byte[12];
+        b[11] = (byte) (r % 256);
+        r >>>= 8;
+        b[10] = (byte) (r % 256);
+        r >>>= 8;
+        b[9] = (byte) (r % 256);
+        r >>>= 8;
+        b[8] = (byte) r;
+
         b[7] = (byte) (l % 256);
         l >>>= 8;
         b[6] = (byte) (l % 256);
@@ -131,7 +151,7 @@ public class Tools {
         l >>>= 8;
         b[1] = (byte) (l % 256);
         l >>>= 8;
-        b[0] = (byte)l;
+        b[0] = (byte) l;
         return b;
     }
 }

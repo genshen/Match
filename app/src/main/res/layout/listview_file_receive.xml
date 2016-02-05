@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/message_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="@dimen/chat_time_margin_top_bottom"
+        android:layout_marginLeft="@dimen/chat_time_margin_left"
+        android:layout_marginStart="@dimen/chat_time_margin_left"
+        android:layout_marginTop="@dimen/chat_time_margin_top_bottom"
+        android:textColor="@color/message_time_color"
+        android:textSize="14sp" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/message_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/message_time"
+        android:layout_marginEnd="@dimen/listview_file_record_item_big_margin"
+        android:layout_marginLeft="@dimen/listview_file_record_item_small_margin"
+        android:layout_marginRight="@dimen/listview_file_record_item_big_margin"
+        android:layout_marginStart="@dimen/listview_file_record_item_small_margin"
+        android:layout_marginBottom="@dimen/listview_file_record_item_bottom_margin"
+        card_view:cardCornerRadius="@dimen/color_card_corner_radius">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/file_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/file_icon"
+                android:singleLine="true"
+                android:ellipsize="middle"
+                android:textColor="@color/black"
+                android:textSize="16sp"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/file_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/file_name"
+                android:layout_toRightOf="@+id/file_icon"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/transfer_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/file_name"
+                android:layout_alignParentRight="true"
+                android:text="30s"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/file_to_who"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/file_size"
+                android:layout_toRightOf="@+id/file_icon"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

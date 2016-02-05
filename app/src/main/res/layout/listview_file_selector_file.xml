@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_activated"
+    android:padding="@dimen/file_selector_files_padding">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/file_selector_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/file_selector_files_icon_margin"
+        android:src="@drawable/uc_file" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/file_selector_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/file_selector_icon"
+        android:layout_gravity="center_vertical"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/file_selector_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/file_selector_icon"
+        android:layout_below="@+id/file_selector_title"
+        android:layout_gravity="center_vertical"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/file_selector_modify_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/file_selector_size"
+        android:layout_below="@+id/file_selector_title"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/file_selector_files_right_margin"/>
+</RelativeLayout>

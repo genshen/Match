@@ -4,7 +4,7 @@ import com.holo.m.message.MessageType;
 import com.holo.m.message.Messages;
 import com.holo.m.tools.DateTools;
 import com.holo.m.tools.Tools;
-import com.holo.wifichat.MyApp;
+import com.holo.match.MyApp;
 
 import java.io.Serializable;
 import java.net.DatagramPacket;

@@ -12,7 +12,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.widget.ImageView;
 
-import com.holo.wifichat.R;
+import com.holo.match.R;
 
 
 /**

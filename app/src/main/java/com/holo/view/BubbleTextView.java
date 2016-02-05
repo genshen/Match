@@ -7,7 +7,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.holo.wifichat.R;
+import com.holo.match.R;
 /**
  * Created by lgp on 2015/3/24.
  */

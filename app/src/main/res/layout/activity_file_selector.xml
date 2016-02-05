@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.holo.wifichat.FileSelector">
+    tools:context="com.holo.match.FileSelector">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -22,7 +22,7 @@
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
-
+            <!--app:navigationIcon="@drawable/actionbar_back"-->
         </android.support.v7.widget.Toolbar>
 
         <FrameLayout
@@ -36,7 +36,7 @@
         android:id="@+id/viewpager_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/tab_height"
+        android:layout_marginBottom="@dimen/tab_height_adjust"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

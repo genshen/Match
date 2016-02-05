@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.holo.wifichat">
+    package="com.holo.match">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -9,14 +9,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".MyApp"
+        android:name="com.holo.match.MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.holo.match.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,28 +26,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChatActivity"
+            android:name="com.holo.match.ChatActivity"
             android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".WebActivity"
+            android:name="com.holo.match.WebActivity"
             android:label="@string/title_activity_web"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".service.HttpIntentService"
+            android:name="com.holo.web.HttpIntentService"
             android:exported="false" />
 
         <activity
-            android:name=".FileSelector"
+            android:name="com.holo.match.FileSelector"
             android:label="@string/title_activity_file_selector"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".FileRecord"
+            android:name="com.holo.match.FileRecord"
             android:label="@string/title_activity_file_record"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name="com.holo.m.tcp.FileSendIntentService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

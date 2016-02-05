@@ -8,6 +8,7 @@
     <dimen name="friend_list_padding">12dp</dimen>
     <dimen name="contact_width">60dp</dimen>
     <dimen name="tab_height">40dp</dimen>
+    <dimen name="tab_height_adjust">48dp</dimen>
     <dimen name="friend_list_ip_left_margin">8dp</dimen>
 
     <!--Chat Bubble-->
@@ -22,9 +23,23 @@
 
     <!--Chat Bubble-->
 
+    <!--File Record-->
+    <dimen name="listview_file_record_item_small_margin">10dp</dimen>
+    <dimen name="listview_file_record_item_big_margin">60dp</dimen>
+    <dimen name="listview_file_record_item_bottom_margin">5dp</dimen>
+    <dimen name="color_card_corner_radius">4dp</dimen>
+    <!--/File Record-->
     <dimen name="chat_bottom_line_padding">6dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 
-    <!--FileSelector_-->
+    <!--FileSelector-->
     <dimen name="app_image_view_size">46dp</dimen>
+    <dimen name="file_selector_music_padding">8dp</dimen>
+    <dimen name="file_selector_music_image_margin">5dp</dimen>
+    <dimen name="file_selector_music_size_margin">12dp</dimen>
+
+    <dimen name="file_selector_files_padding">8dp</dimen>
+    <dimen name="file_selector_files_icon_margin">5dp</dimen>
+    <dimen name="file_selector_files_right_margin">12dp</dimen>
+    <!--/FileSelector-->
 </resources>
