@@ -12,6 +12,7 @@ public class Messages implements Serializable {
     public String mac;
     public final String name;
     public final MessageType type;
+    private long length;
     public String ip;
 
     public Messages(String mac, long time, String name, MessageType type, Object content) {
@@ -31,6 +32,14 @@ public class Messages implements Serializable {
     }
     public long getTime() {
         return this.time;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public long getLength() {
+        return length;
     }
 
     public void setIp(String ip) {

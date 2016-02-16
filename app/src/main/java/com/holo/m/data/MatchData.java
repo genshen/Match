@@ -19,7 +19,8 @@ public class MatchData extends SQLiteOpenHelper {
             "time integer," +       //时间
             "type integer," +       //文字?图?文件?
             "sender integer," +     //发送者或接收者
-            "content varchar," +    //内容
+            "content varchar," +    //内容，文件名/路径，
+            "length integer,"+   //文件大小,语音时长
             "state integer)";       //状态
     //ip
 

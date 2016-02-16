@@ -1,0 +1,56 @@
+<div id="app">
+    <style>
+        .demo-card-wide.mdl-card {
+            width: 512px;
+            margin: 30px;
+        }
+        .demo-card-wide > .mdl-card__title {
+            color: #fff;
+            height: 176px;
+            background: url('public/images/welcome_card.jpg') center / cover;
+        }
+        .demo-card-wide > .mdl-card__menu {
+            color: #fff;
+        }
+    </style>
+
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">Welcome</h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <!--Content-->
+            <ul>
+                <li v-for="todo in todos">
+                    {{ todo.text }}
+                </li>
+            </ul>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                Get Started
+            </a>
+        </div>
+        <div class="mdl-card__menu">
+            <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                <i class="material-icons">share</i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Simple MDL Progress Bar -->
+    <div id="p1" class="mdl-progress mdl-js-progress"></div>
+    <script>
+        document.querySelector('#p1').addEventListener('mdl-componentupgraded', function() {
+            this.MaterialProgress.setProgress(44);
+        });
+    </script>
+    <i class="material-icons orange600">face</i>
+
+    <form  method="post" enctype="multipart/form-data">
+        <input type="file" name="hello">
+        <input type="text" name="name">
+        <button type="submit">Submit</button>
+    </form>
+
+</div>

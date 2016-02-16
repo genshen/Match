@@ -128,7 +128,7 @@ public class ImagesSelectorFragment extends Fragment implements AdapterView.OnIt
             images.get(position).put(CHECKED, false);
         }
         adapter.notifyDataSetChanged();
-        mode.setTitle(String.format(getString(R.string.have_selected_count), image_grid_view.getCheckedItemCount()));
+        mode.setTitle(getString(R.string.have_selected_count, image_grid_view.getCheckedItemCount()));
     }
 
     @Override
@@ -139,7 +139,7 @@ public class ImagesSelectorFragment extends Fragment implements AdapterView.OnIt
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        mode.setTitle(String.format(getString(R.string.have_selected_count), image_grid_view.getCheckedItemCount()));
+        mode.setTitle(getString(R.string.have_selected_count, image_grid_view.getCheckedItemCount()));
         return true;
     }
 

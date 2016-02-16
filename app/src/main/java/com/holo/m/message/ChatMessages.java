@@ -7,6 +7,7 @@ public class ChatMessages {
     /*message type*/
     public static final short TEXT = 0;
     public static final short FILE = 1;
+    public static final short VOICE = 2;
 
     /*message state*/
     public static final short SENT = 1;

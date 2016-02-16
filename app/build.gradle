@@ -6,7 +6,7 @@ android {
     useLibrary "org.apache.http.legacy"
     defaultConfig {
         applicationId "com.holo.wifichat"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 3
         versionName "1.0"
@@ -31,4 +31,5 @@ dependencies {
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.4.2@aar'
     compile 'com.android.support:support-v4:23.1.0'
     compile files('libs/universal-image-loader-1.9.5.jar')
+    compile project(':sounds')
 }

@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,16 +28,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.holo.m.data.MatchDataManager;
+import com.holo.m.files.BasicFileInformation;
+import com.holo.m.files.FileInfo;
+import com.holo.m.files.FileManager;
 import com.holo.m.message.ChatMessages;
 import com.holo.m.message.Messages;
 import com.holo.m.tcp.FileReceiver;
 import com.holo.m.tcp.FileSendIntentService;
-import com.holo.m.tools.DateTools;
-import com.holo.m.files.BasicFileInformation;
-import com.holo.m.files.FileInfo;
-import com.holo.m.files.FileManager;
+import com.holo.m.tcp.MessageSend;
+import com.holo.m.tools.TimeTools;
 import com.holo.m.udp.UdpReceive;
 import com.holo.m.udp.UdpSend;
+import com.holo.m.voice.Voice;
+import com.holo.sounds.MediaRecorderDialog;
+import com.holo.sounds.OnSaveButtonClickListener;
 import com.holo.view.BubbleTextView;
 
 import java.io.Serializable;
@@ -44,9 +49,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpReceive.ReceiveChatMessageListener, View.OnFocusChangeListener {
+public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpReceive.ReceiveChatMessageListener, View.OnFocusChangeListener, AdapterView.OnItemClickListener {
 
-    String title, last_ip = null, ip, mac;
+    String title, ip, mac;
     boolean editorTextEmpty = true, gridLayoutShow = false;
 
     EditText message_content;
@@ -86,7 +91,7 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
     public void onDestroy() {
         super.onDestroy();
         chat_manager.close();
-        UdpReceive.chat_ip = last_ip;
+        UdpReceive.chat_ip = null;
     }
 
     @Override
@@ -105,10 +110,22 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
                 startActivity(intent);
                 break;
             case android.R.id.home:
-                finish();
+                end();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        end();
+    }
+
+    private void end() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void init(Messages m) {
@@ -116,7 +133,6 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
             distribute(m);
         }
         UdpReceive ur = MyApp.ur;
-        last_ip = UdpReceive.chat_ip;
         ur.setChatIp(ip);
         ur.setOnReceiveChatMessageListener(this);
         msgSend = new UdpSend();
@@ -133,6 +149,7 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
         chatAdapter = new ChatAdapter(this, chat_list);
         ListView listview = (ListView) findViewById(R.id.message_list);
         listview.setAdapter(chatAdapter);
+        listview.setOnItemClickListener(this);
     }
 
     @Override
@@ -171,14 +188,28 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
         if (requestCode == 0x200 && resultCode == RESULT_OK) {
             List<BasicFileInformation> listInfo = (List<BasicFileInformation>) data.getSerializableExtra("files");
             if (listInfo == null) return; // listInfo may cause nullPointer.
-            long time = DateTools.getTime();
+            long time = TimeTools.getTime();
             for (BasicFileInformation info : listInfo) {
                 //Todo now ,transfer_time = 0;file_type = 1,file_state = 0,remark = ""
                 info.sender_id = chat_manager.insertFileTransferRecord(mac, time, title,
                         1, 1, 1, info.size, info.name, info.path, 0, "");
-                addNewMessage(time, ChatMessages.FILE, true, info.name, ChatMessages.SENT);
+                addNewMessage(time, ChatMessages.FILE, true, info.name, info.size, ChatMessages.SENT);
             }
             msgSend.sendFileRequest(ip, (Serializable) listInfo);
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        HashMap<String, Object> chat = chat_list.get(position);
+        switch ((short) chat.get("type")) {
+            case ChatMessages.TEXT:
+                break;
+            case ChatMessages.FILE:
+                break;
+            case ChatMessages.VOICE:
+                Voice.playVoice(this, chat_list.get(position).get("content").toString());
+                break;
         }
     }
 
@@ -197,9 +228,9 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
             case R.id.send_message:
                 String content = message_content.getText().toString();
                 if (!content.isEmpty()) {
-                    long time = DateTools.getTime();
+                    long time = TimeTools.getTime();
                     msgSend.sendMessage(ip, time, content);
-                    addNewMessage(time, ChatMessages.TEXT, true, content, ChatMessages.SENT);
+                    addNewMessage(time, ChatMessages.TEXT, true, content, 0, ChatMessages.SENT);
                     message_content.setText(""); // empty text
                 }
                 break;
@@ -208,6 +239,26 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
                     gridLayoutShow = false;
                     gridLayout.setVisibility(View.GONE);
                 }
+                break;
+            case R.id.tool_box_voice:
+                new MediaRecorderDialog.Builder(this, Voice.BASE_PATH)
+                        .setOutputFormat(MediaRecorderDialog.OutputFormat.MPEG_4)
+                        .setAudioEncoder(MediaRecorderDialog.AudioEncoder.AAC)
+                        .setTitle("Recording,,,")
+                        .setMessage("Press the button")
+                        .setOnSaveButtonClickListener(new OnSaveButtonClickListener() {
+                            @Override
+                            public void onSucceed(String file_name, int duration) {
+                                long time = TimeTools.getTime();
+                                addNewMessage(time, ChatMessages.VOICE, true, file_name, (long) duration, ChatMessages.RECEIVED);
+                                msgSend.sendVoiceRequest(ip, time, duration, file_name);
+                            }
+
+                            @Override
+                            public void onFailure() {
+                            }
+                        })
+                        .show();
                 break;
             case R.id.tool_box_send_file:
                 Intent fileSelector = new Intent(this, FileSelector.class);
@@ -223,16 +274,17 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
      * @param content text message or file name
      * @param state   (for a {@code sender == true} message) 0 for sent(may lost) ,1 for received,2 for read
      */
-    private void addNewMessage(long time, short type, boolean sender, String content, short state) {
+    private void addNewMessage(long time, short type, boolean sender, String content, long length, short state) {
         HashMap<String, Object> chat = new HashMap<>();
         chat.put("time", time);
         chat.put("type", type);
         chat.put("sender", sender);
         chat.put("content", content);
+        chat.put("length", length);
         chat.put("state", state);
         chat_list.add(chat);
         chatAdapter.notifyDataSetChanged();
-        chat_manager.insertChatRecord(mac, time, type, sender ? 1 : 0, content, state);
+        chat_manager.insertChatRecord(mac, time, type, sender ? 1 : 0, content, length, state);
     }
 
     private void HideInputMethod() {
@@ -268,10 +320,21 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
 
     private void distribute(final Messages messages) {
         switch (messages.type) {
-            case NORMAL_MESSAGE:
+            case TEXT_MESSAGE:
                 long time = messages.getTime();
                 String content = (String) messages.getContent();
-                addNewMessage(time, ChatMessages.TEXT, false, content, ChatMessages.RECEIVED);
+                addNewMessage(time, ChatMessages.TEXT, false, content, 0, ChatMessages.RECEIVED);
+                break;
+            case VOICE_MESSAGE_Request:
+                // start receive message;
+                long voice_time = messages.getTime();
+                addNewMessage(voice_time, ChatMessages.VOICE, false, (String) messages.getContent(),
+                        messages.getLength(), ChatMessages.RECEIVED);
+                msgSend.sendVoiceReply(messages.ip, (String) messages.getContent());
+                break;
+            case VOICE_MESSAGE_Reply:
+                MessageSend voice = new MessageSend(messages.ip, (String) messages.getContent());
+                voice.start();
                 break;
             case FileSendRequest:
                 new AlertDialog.Builder(this)
@@ -286,7 +349,7 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
                                 //start file transmission and store the message to mem and database
                                 String base_store_path = FileManager.getSDPath() + "/";
                                 for (BasicFileInformation info : listFile) {
-                                    addNewMessage(messages.getTime(), ChatMessages.FILE, false, info.name, ChatMessages.RECEIVED);
+                                    addNewMessage(messages.getTime(), ChatMessages.FILE, false, info.name, info.size, ChatMessages.RECEIVED);
                                     //Todo now ,transfer_time = 0;file_type = 1,remark = "",file_state = 0
                                     info.receive_id = chat_manager.insertFileTransferRecord(messages.mac, messages.getTime(), messages.name,
                                             0, 0, 1, info.size, info.name, base_store_path + info.name, 0, "");
@@ -314,7 +377,8 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
         private Context context;
         private List<HashMap<String, Object>> chat_list;
         int[] layout = {R.layout.message_send, R.layout.message_receive,
-                R.layout.message_file_send, R.layout.message_file_receive};
+                R.layout.message_file_send, R.layout.message_file_receive,
+                R.layout.message_voice_send, R.layout.message_voice_receive};
 
         public ChatAdapter(Context context, List<HashMap<String, Object>> chat_list) {
             this.context = context;
@@ -347,7 +411,7 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
 
         @Override
         public int getViewTypeCount() {
-            return 4;
+            return 6;
         }
 
         @Override
@@ -365,18 +429,23 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
         private void setView(View convertView, Map<String, Object> value) {
             short type = (short) value.get("type");
             switch (type) {
-                case 0: // text
+                case ChatMessages.TEXT: // text
                     TextViewHolder vh = (TextViewHolder) convertView.getTag();
                     vh.btv.setText(value.get("content").toString());
-                    vh.time.setText(DateTools.getShowAbleDate(value.get("time")));
+                    vh.time.setText(TimeTools.getShowAbleDate(value.get("time")));
                     break;
-                case 1: // file
+                case ChatMessages.FILE: // file
                     FileViewHolder file_view_holder = (FileViewHolder) convertView.getTag();
                     file_view_holder.file_icon.setImageResource(
                             FileInfo.getFileIcon(FileInfo.getEnd(value.get("content").toString())));
                     file_view_holder.file_name.setText(value.get("content").toString());
-                    file_view_holder.time.setText(DateTools.getShowAbleDate(value.get("time")));
+                    file_view_holder.time.setText(TimeTools.getShowAbleDate(value.get("time")));
                     convertView.setTag(file_view_holder);
+                    break;
+                case ChatMessages.VOICE:
+                    TextViewHolder voice_view = (TextViewHolder) convertView.getTag();
+                    voice_view.btv.setText(TimeTools.getVoiceDurationDisplay((long) value.get("length")));
+                    voice_view.time.setText(TimeTools.getShowAbleDate(value.get("time")));
                     break;
             }
         }
@@ -389,16 +458,16 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
             convertView = getLayoutInflater().inflate(layout[getViewType(sender, type)], parent, false);
             // set viewHolder and value for each case
             switch (type) {
-                case 0: // text
+                case ChatMessages.TEXT: // text
                     TextViewHolder vh = new TextViewHolder();
                     vh.btv = (BubbleTextView) convertView.findViewById(R.id.message_content);
                     vh.time = (TextView) convertView.findViewById(R.id.message_time);
 
                     vh.btv.setText(chat_map.get("content").toString());
-                    vh.time.setText(DateTools.getShowAbleDate(chat_map.get("time")));
+                    vh.time.setText(TimeTools.getShowAbleDate(chat_map.get("time")));
                     convertView.setTag(vh);
                     break;
-                case 1: // file
+                case ChatMessages.FILE: // file
                     FileViewHolder file_view_holder = new FileViewHolder();
                     file_view_holder.file_icon = (AppCompatImageView) convertView.findViewById(R.id.file_icon);
                     file_view_holder.file_name = (AppCompatTextView) convertView.findViewById(R.id.file_name);
@@ -407,8 +476,17 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
                     file_view_holder.file_icon.setImageResource(
                             FileInfo.getFileIcon(FileInfo.getEnd(chat_map.get("content").toString()))); // todo 文件类型可以存数据库
                     file_view_holder.file_name.setText(chat_map.get("content").toString());
-                    file_view_holder.time.setText(DateTools.getShowAbleDate(chat_map.get("time")));
+                    file_view_holder.time.setText(TimeTools.getShowAbleDate(chat_map.get("time")));
                     convertView.setTag(file_view_holder);
+                    break;
+                case ChatMessages.VOICE:
+                    TextViewHolder voice_view = new TextViewHolder();
+                    voice_view.btv = (BubbleTextView) convertView.findViewById(R.id.message_content);
+                    voice_view.time = (TextView) convertView.findViewById(R.id.message_time);
+
+                    voice_view.btv.setText(TimeTools.getVoiceDurationDisplay((long) chat_map.get("length")));
+                    voice_view.time.setText(TimeTools.getShowAbleDate(chat_map.get("time")));
+                    convertView.setTag(voice_view);
                     break;
             }
             return convertView;

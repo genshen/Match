@@ -25,6 +25,7 @@ import android.widget.ListView;
 
 import com.holo.m.files.BasicFileInformation;
 import com.holo.m.files.FileInfo;
+import com.holo.m.tools.TimeTools;
 import com.holo.match.R;
 
 import java.io.Serializable;
@@ -87,7 +88,7 @@ public class MusicSelectorFragment extends Fragment implements AbsListView.Multi
                 list_item.put(DATA, cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
                 list_item.put(DISPLAY_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)));
                 list_item.put(ARTIST, cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-                list_item.put(DURATION, getDurationShow(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))));
+                list_item.put(DURATION, TimeTools.getDurationDisplay(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))));
                 long size = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
                 list_item.put(SIZE, size);
                 list_item.put(SIZE_SHOW, FileInfo.getFileSize(size));
@@ -112,7 +113,7 @@ public class MusicSelectorFragment extends Fragment implements AbsListView.Multi
                 list_item.put(DATA, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA)));
                 list_item.put(DISPLAY_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME)));
                 list_item.put(ARTIST, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.ARTIST)));
-                list_item.put(DURATION, getDurationShow(cursor.getInt(cursor.getColumnIndex(MediaStore.Video.Media.DURATION))));
+                list_item.put(DURATION, TimeTools.getDurationDisplay(cursor.getInt(cursor.getColumnIndex(MediaStore.Video.Media.DURATION))));
                 long size = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media.SIZE));
                 list_item.put(SIZE, size);
                 list_item.put(SIZE_SHOW, FileInfo.getFileSize(size));
@@ -124,21 +125,9 @@ public class MusicSelectorFragment extends Fragment implements AbsListView.Multi
         return music_video_list;
     }
 
-    private String getDurationShow(int duration) {
-        duration /= 1000;
-        int second = duration % 60;
-        duration /= 60;
-        int minute = duration % 60;
-        duration /= 60;
-        int hour = duration % 60;
-        return (hour == 0 ? "" : hour + ":") +
-                (minute < 10 ? "0" + minute + ":" : minute + ":") +
-                (second < 10 ? "0" + second : second);
-    }
-
     @Override
     public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-        mode.setTitle(String.format(getString(R.string.have_selected_count), listView.getCheckedItemCount()));
+        mode.setTitle(getString(R.string.have_selected_count, listView.getCheckedItemCount()));
     }
 
     @Override
@@ -149,7 +138,7 @@ public class MusicSelectorFragment extends Fragment implements AbsListView.Multi
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        mode.setTitle(String.format(getString(R.string.have_selected_count), listView.getCheckedItemCount()));
+        mode.setTitle(getString(R.string.have_selected_count, listView.getCheckedItemCount()));
         return true;
     }
 

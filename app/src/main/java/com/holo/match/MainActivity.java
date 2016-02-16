@@ -19,6 +19,7 @@ import android.widget.SimpleAdapter;
 import com.github.clans.fab.FloatingActionButton;
 import com.holo.m.message.Messages;
 import com.holo.m.tcp.FileSendIntentService;
+import com.holo.m.tcp.MessageReceiverService;
 import com.holo.m.tools.Tools;
 import com.holo.m.udp.UdpReceive;
 import com.holo.m.udp.UdpSend;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     UdpSend msgSend;
     UdpReceive ur;
+    Intent voice_receive_intent;
     Handler handler = new MHandler();
 
     @Override
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onDestroy() {
         super.onDestroy();
         ur.close();
+        stopService(voice_receive_intent);
     }
 
     private void init() {
@@ -104,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         MyApp.ur = ur;
         ur.setOnReceiveMessageListener(this);
         ur.start();
+
+        voice_receive_intent = new Intent(this, MessageReceiverService.class);
+        startService(voice_receive_intent);
     }
 
     private Map<String, Object> getSelfInfo() {
@@ -141,9 +147,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 checkUser(msg.mac, msg.ip, msg.name, false);
                 msgSend.onlineReply(msg.ip);
                 break;
-            case NORMAL_MESSAGE:
+            case TEXT_MESSAGE:
                 checkUser(msg.mac, msg.ip, msg.name, true);
                 setUnread(msg.ip, msg.name);
+                break;
+            case VOICE_MESSAGE_Request:
+//                setUnread(msg.ip, msg.name);
                 break;
             case FileSendRequest:
                 // dialog! default answer is agree!
@@ -161,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(getString(R.string.notice_file_receive_title))
                         .setTicker(getString(R.string.notice_file_receive_title))
-                        .setContentText(String.format(getString(R.string.notice_file_receive_content), msg.name))
+                        .setContentText(getString(R.string.notice_file_receive_content, msg.name))
                         .setContentIntent(pi)
                         .setAutoCancel(true);
                 nm.notify(NOTIFICATION_ID, mBuilder.build());
@@ -174,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Bundle b = new Bundle();
                 b.putSerializable("files", (Serializable) msg.getContent());
                 intent.putExtras(b);
-                intent.putExtra("ip",msg.ip);
+                intent.putExtra("ip", msg.ip);
                 startService(intent);
                 break;
         }

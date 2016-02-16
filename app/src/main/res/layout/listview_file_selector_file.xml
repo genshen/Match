@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/file_selector_files_icon_margin"
+        android:layout_marginEnd="@dimen/file_selector_files_icon_margin"
         android:src="@drawable/uc_file" />
 
     <android.support.v7.widget.AppCompatTextView
@@ -18,6 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/file_selector_icon"
         android:layout_gravity="center_vertical"
+        android:singleLine="true"
+        android:ellipsize="middle"
         android:textColor="@android:color/black"
         android:textSize="16sp"/>
 

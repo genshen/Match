@@ -2,13 +2,14 @@ package com.holo.web.tools;
 
 import com.holo.web.request.RequestType;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by ���� on 2015/12/31.
+ * Created by cgs on 2015/12/31.
  */
 public class StringTools {
     /**
@@ -48,6 +49,21 @@ public class StringTools {
         }
     }
 
+    public static String getStringByBytesUTF8(byte[] buff, int buff_size) {
+        return getStringByBytes(buff, buff_size,"utf-8");
+    }
+
+    public static String getStringByBytes(byte[] b, int length, String charset) {
+        byte[] _b = new byte[length];
+        System.arraycopy(b, 0, _b, 0, length);
+        try {
+            return new String(_b, charset);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public static String getExtension(String name) {
         char u[] = name.toCharArray();
         StringBuilder extension = new StringBuilder();
@@ -59,20 +75,20 @@ public class StringTools {
 
     /**
      * check whether the file has modified after modifyTime
+     *
      * @param modifyTime modifyTime from browser
      * @param lastmodify the file last modify
      * @return true for has modified, false for not modified
      */
-    static  SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
     public static boolean CheckModify(String modifyTime, long lastmodify) {
-        if(modifyTime==null){
+        if (modifyTime == null) {
             return true;
         }
         try {
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
             Date d = sdf.parse(modifyTime);
-            long date = d.getTime()/1000;
-//            System.out.println(date+":"+lastmodify/1000);
-            return date < lastmodify/1000;
+            long date = d.getTime() / 1000;
+            return date < lastmodify / 1000;
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             return true;
@@ -81,11 +97,14 @@ public class StringTools {
 
     /**
      * change long format to  format{ EEE, dd MMM yyyy HH:mm:ss z}
-     * @param l
+     *
+     * @param l long
      * @return format string
      */
     public static String formatModify(long l) {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
         Date d = new Date(l);
         return sdf.format(d);
     }
+
 }

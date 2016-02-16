@@ -1,0 +1,146 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/media_recorder_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/white"
+        android:gravity="center">
+
+        <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:rb_color="@color/media_recorder_colorPrimary"
+            app:rb_duration="3000"
+            app:rb_radius="16dp"
+            app:rb_rippleAmount="4"
+
+            app:rb_scale="6">
+
+            <ImageView
+                android:id="@+id/centerImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_mic_none_white_24dp" />
+        </com.skyfishjy.library.RippleBackground>
+
+        <TextView
+            android:id="@+id/timer"
+            style="@style/SongTitleStyle"
+            android:text="00:00"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:typeface="serif"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <com.truizlop.fabreveallayout.FABRevealLayout
+        android:id="@+id/fab_reveal_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.FloatingActionButton
+            style="@style/FABStyle"
+            android:src="@drawable/ic_mic_none_white_24dp"
+            app:backgroundTint="@color/media_recorder_colorPrimary" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    style="@style/AlbumTitleStyle" />
+
+                <TextView
+                    android:id="@+id/msg"
+                    style="@style/ArtistNameStyle" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <LinearLayout
+                android:id="@+id/recordingLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    style="@style/FABStyle"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/stopRecording"
+                        style="@style/MusicButtonStyle.CenterButtonStyle"
+                        android:src="@drawable/ic_stop" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    style="@style/FABStyle"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/play"
+                        style="@style/MusicButtonStyle"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_play_arrow_black_24dp" />
+
+                    <ImageView
+                        android:id="@+id/stop"
+                        style="@style/MusicButtonStyle.CenterButtonStyle"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_stop" />
+
+                    <ImageView
+                        android:id="@+id/save"
+                        style="@style/MusicButtonStyle"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_save_black_24dp" />
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/record_progress_bar"
+                    style="@style/BarStyle"
+                    android:max="15" />
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </com.truizlop.fabreveallayout.FABRevealLayout>
+</LinearLayout>

@@ -110,7 +110,7 @@ public class AppSelectorFragment extends Fragment implements AdapterView.OnItemC
 
     @Override
     public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-        mode.setTitle(String.format(getString(R.string.have_selected_count), mAppGridView.getCheckedItemCount()));
+        mode.setTitle(getString(R.string.have_selected_count, mAppGridView.getCheckedItemCount()));
     }
 
     @Override
@@ -121,7 +121,7 @@ public class AppSelectorFragment extends Fragment implements AdapterView.OnItemC
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        mode.setTitle(String.format(getString(R.string.have_selected_count), mAppGridView.getCheckedItemCount()));
+        mode.setTitle(getString(R.string.have_selected_count, mAppGridView.getCheckedItemCount()));
         return true;
     }
 

@@ -22,7 +22,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.holo.m.files.BasicFileInformation;
-import com.holo.m.tools.DateTools;
+import com.holo.m.tools.TimeTools;
 import com.holo.m.files.FileInfo;
 import com.holo.m.files.FileManager;
 import com.holo.match.R;
@@ -171,7 +171,7 @@ public class FileSelectorFragment extends Fragment implements AdapterView.OnItem
             listView.setItemChecked(position,false);
             return;
         }
-        mode.setTitle(String.format(getString(R.string.have_selected_count), listView.getCheckedItemCount()));
+        mode.setTitle(getString(R.string.have_selected_count, listView.getCheckedItemCount()));
     }
 
     @Override
@@ -182,7 +182,7 @@ public class FileSelectorFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        mode.setTitle(String.format(getString(R.string.have_selected_count), listView.getCheckedItemCount()));
+        mode.setTitle(getString(R.string.have_selected_count, listView.getCheckedItemCount()));
         return true;
     }
 
@@ -262,7 +262,7 @@ public class FileSelectorFragment extends Fragment implements AdapterView.OnItem
             if (!is_dir) {
                 dirView.icon.setImageResource(FileInfo.getFileIcon(FileInfo.getEnd(file_name)));
                 dirView.size.setText(FileInfo.getFileSize((long) m.get(SIZE)));
-                dirView.modify_time.setText(DateTools.getShowAbleDate(m.get(LAST_MODIFY)));
+                dirView.modify_time.setText(TimeTools.getShowAbleDate(m.get(LAST_MODIFY)));
             }
             return convertView;
         }

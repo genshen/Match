@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.holo.web.HttpIntentService;
+import com.holo.web.tools.AndroidAPI;
 
 public class WebActivity extends AppCompatActivity {
     Intent httpIntent;
@@ -29,6 +30,7 @@ public class WebActivity extends AppCompatActivity {
             }
         });
 
+        AndroidAPI.initContext(this);
         httpIntent = new Intent(this, HttpIntentService.class);
         startService(httpIntent);
     }

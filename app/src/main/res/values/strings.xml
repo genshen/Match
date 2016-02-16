@@ -49,7 +49,8 @@
     <!--/文件传输记录-->
     <!--Web-->
     <string name="computer">Web版</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="open_web_browser">请在PC浏览器中打开:</string>
+    <string name="http_address">http://%s:8080</string>
     <!--/Web-->
 
     <!-- TODO: Remove or change this placeholder text -->

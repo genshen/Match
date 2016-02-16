@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/message_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/chat_time_margin_top_bottom"
+        android:layout_marginLeft="@dimen/chat_time_margin_left"
+        android:layout_marginStart="@dimen/chat_time_margin_left"
+        android:layout_marginTop="@dimen/chat_time_margin_top_bottom"
+        android:textColor="@color/message_time_color"
+        android:textSize="14sp" />
+
+    <com.holo.view.BubbleTextView
+        android:id="@+id/message_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/message_time"
+        android:layout_marginEnd="@dimen/chat_bubble_l_margin_right"
+        android:layout_marginLeft="@dimen/chat_bubble_l_margin_left"
+        android:layout_marginRight="@dimen/chat_bubble_l_margin_right"
+        android:layout_marginStart="@dimen/chat_bubble_l_margin_left"
+        android:padding="10dp"
+        android:drawableLeft="@drawable/uc_speech"
+        android:drawableStart="@drawable/uc_speech"
+        android:gravity="center"
+        app:angle="2dp"
+        app:arrowHeight="10dp"
+        app:arrowLocation="left"
+        app:arrowPosition="10dp"
+        app:arrowWidth="8dp"
+        app:bubbleColor="@color/message_receive_background" />
+    <!--ff4444-->
+</RelativeLayout>

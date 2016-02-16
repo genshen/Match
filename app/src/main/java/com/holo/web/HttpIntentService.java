@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import com.holo.web.response.core.Config;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,7 +29,7 @@ public class HttpIntentService extends IntentService {
     public void onCreate() {
         super.onCreate();
         try {
-            serve = new ServerSocket(8080);
+            serve = new ServerSocket(Config.HttpPort);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,7 +42,7 @@ public class HttpIntentService extends IntentService {
             while (!serve.isClosed()) {
                 // when run [ serve.close(); ] the Exception will happen.
                 clientSocket = serve.accept();
-                new ServerThread(clientSocket);
+                (new ServerThread(clientSocket)).start();
             }
         } catch (Exception e) {
             e.printStackTrace();

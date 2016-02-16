@@ -23,11 +23,20 @@ public class MatchDataManager {
         file_table_auto_increase_top = getTableTop(FILE_TABLE_NAME);
     }
 
-    public void insertChatRecord(String mac, long time, int type, int sender, String content, int state) {
+    /**
+     * @param mac     mac address
+     * @param time    time(second)
+     * @param type    type: text,image,file,voice
+     * @param sender  1 for sender,0 for receiver
+     * @param content text message or file name or file path;
+     * @param length    voice duration or total file size
+     * @param state   sent? received? read?
+     */
+    public void insertChatRecord(String mac, long time, int type, int sender, String content, long length, int state) {
         content = content.replaceAll("\'", "\'\'");
-        String sql = "insert into  chat_data  (mac,time, type,sender,content,state) VALUES "
+        String sql = "insert into  chat_data  (mac,time,type,sender,content,length,state) VALUES "
                 + " (\'" + mac + "\',\'" + time + "\',\'" + type + "\',\'"
-                + sender + "\',\'" + content + "\',\'" + state + "\')";
+                + sender + "\',\'" + content + "\',\'" + length + "\',\'" + state + "\')";
         match_db.execSQL(sql);
     }
 
@@ -95,6 +104,7 @@ public class MatchDataManager {
             listitem.put("type", cursor.getShort(cursor.getColumnIndex("type")));
             listitem.put("sender", cursor.getShort(cursor.getColumnIndex("sender")) == 1);
             listitem.put("content", cursor.getString(cursor.getColumnIndex("content")));
+            listitem.put("length", cursor.getLong(cursor.getColumnIndex("length")));
             listitem.put("state", cursor.getShort(cursor.getColumnIndex("state")));
             mlist.add(listitem);
             cursor.moveToNext();

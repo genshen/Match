@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.holo.m.data.MatchDataManager;
 import com.holo.m.tcp.FileReceiver;
 import com.holo.m.tcp.FileSendIntentService;
-import com.holo.m.tools.DateTools;
+import com.holo.m.tools.TimeTools;
 import com.holo.m.files.FileInfo;
 
 import java.io.File;
@@ -205,7 +205,7 @@ public class FileRecord extends AppCompatActivity implements FileReceiver.Receiv
             } else {
                 vh = (ViewHolder) convertView.getTag();
             }
-            vh.time.setText(DateTools.getShowAbleDate(map.get("time")));
+            vh.time.setText(TimeTools.getShowAbleDate(map.get("time")));
             vh.file_name.setText((map.get("file_name")).toString());
             vh.file_size.setText(FileInfo.getFileSize((long) (map.get("file_size"))));  //Todo
             vh.transfer_time.setText((map.get("transfer_time")).toString()); //Todo

@@ -1,24 +1,31 @@
 package com.holo.match.fragment;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.holo.m.tools.Tools;
 import com.holo.match.R;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class WebActivityFragment extends Fragment {
+    AppCompatTextView address;
 
     public WebActivityFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_web, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_web, container, false);
+        address = (AppCompatTextView) rootView.findViewById(R.id.http_address);
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        address.setText(getString(R.string.http_address, Tools.getLocalHostIp()));
     }
 }
