@@ -1,0 +1,57 @@
+<style>
+    td a{color: #3F51B5;}
+    td a:focus,td a:hover{color: #303F9F;}
+</style>
+<div id="app">
+    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+        <thead>
+        <tr>
+            <th>操作</th>
+            <th>名称</th>
+            <th>时长</th>
+            <th>大小</th>
+            <th>艺术家</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="music in musics">
+            <td>
+                <a type="download" href="files/download/{{music.display_name}}?id={{music.id}}&type=1">
+                    <span id="tt4" class="icon material-icons">get_app_black</span>
+                    <div class="mdl-tooltip" for="tt4">
+                        Download
+                    </div>
+                </a>
+                <a type="download" href="javascript:window.alert('hello world')">
+                    <span id="tt4" class="icon material-icons">ic_play_circle_filled_black</span>
+                    <div class="mdl-tooltip" for="tt4">
+                        play
+                    </div>
+                </a>
+            </td>
+            <td> {{ music.title }}</td>
+            <td> {{ music.duration }}</td>
+            <td> {{ music.size_show }}</td>
+            <td> {{ music.artist }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <button data-target="bottom-modal" style="position:fixed;right:60px;bottom:40px;z-index:100"
+            class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored modal-trigger">
+        <i class="material-icons">add</i>
+    </button>
+
+    <div id="toast-t" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+    <script type="text/javascript" src="public/js/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="public/js/dmuploader.min.js"></script>
+    <script type="text/javascript" src="public/js/file_upload.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+       $('.modal-trigger').leanModal();
+    });
+    </script>
+</div>

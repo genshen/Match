@@ -5,25 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
     <link rel="stylesheet" href="/public/css/icon.css">
-    <!--<link rel="stylesheet" href="public/css/grid-layout.css">-->
+    <link rel="stylesheet" href="/public/css/materialize.css">
     <link rel="stylesheet" href="/public/css/material.indigo-red.min.css">
+    <script type="text/javascript" src="public/js/jquery-2.1.1.min.js"></script>
 </head>
 <body>
+<div id="bottom-modal" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h4>任务栏</h4>
+        <div class="row">
+            <div id="file-upload-modal" class="col s12 m6 l4"></div>
+        </div>
+    </div>
+</div>
 <!-- Always shows a header, even in smaller screens. -->
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
-            <!-- Title -->
             <span class="mdl-layout-title">首页</span>
             <!-- Add spacer, to align navigation to the right -->
             <div class="mdl-layout-spacer"></div>
             <!-- Navigation. We hide it in small screens. -->
             <nav class="mdl-navigation mdl-layout--large-screen-only">
-                <a class="mdl-navigation__link" href="">图片</a>
-                <a class="mdl-navigation__link" href="">音乐</a>
-                <a class="mdl-navigation__link" href="">视频</a>
-                <a class="mdl-navigation__link" href="">应用</a>
-                <a class="mdl-navigation__link" href="">文件</a>
+                <a class="mdl-navigation__link" href="images/index.html">图片</a>
+                <a class="mdl-navigation__link" href="audio/index.html">音乐</a>
+                <a class="mdl-navigation__link" href="video/index.html">视频</a>
+                <a class="mdl-navigation__link" href="app/index.html">应用</a>
+                <a class="mdl-navigation__link" href="other/index.html">其他</a>
+                <a class="mdl-navigation__link" href="files/index.html">文件</a>
             </nav>
         </div>
     </header>
@@ -31,23 +40,31 @@
         <span class="mdl-layout-title">Match</span>
         <nav class="mdl-navigation">
             <a class="mdl-navigation__link" href="">首页</a>
-            <a class="mdl-navigation__link" href="">图片</a>
-            <a class="mdl-navigation__link" href="">音乐</a>
-            <a class="mdl-navigation__link" href="">视频</a>
-            <a class="mdl-navigation__link" href="">应用</a>
-            <a class="mdl-navigation__link" href="">文件</a>
+            <a class="mdl-navigation__link" href="images/index.html">图片</a>
+            <a class="mdl-navigation__link" href="audio/index.html">音乐</a>
+            <a class="mdl-navigation__link" href="video/index.html">视频</a>
+            <a class="mdl-navigation__link" href="app/index.html">应用</a>
+            <a class="mdl-navigation__link" href="other/index.html">其他</a>
+            <a class="mdl-navigation__link" href="files/index.html">文件</a>
         </nav>
     </div>
     <main class="mdl-layout__content">
-        <div class="page-content">
+        <div id="main-container">
         </div>
     </main>
 </div>
-<script src="public/js/vue.js" type="text/javascript"></script>
-<script src="public/js/material.min.js"></script>
+<script type="text/javascript" src="public/js/vue.js"></script>
+<!--<script type="text/javascript" src="public/js/jquery.pjax.js"></script>-->
+<script type="text/javascript" src="public/js/material.min.js"></script>
+<script type="text/javascript" src="public/js/materialize.min.js"></script>
 <script type="text/javascript">
-    new Vue(
-    )
+    var DATA =
+    new Vue(DATA);
+ /*    $(function(){
+         $(document).pjax('a', '#main-container');
+         $.pjax.reload('#main-container');
+    });
+ */
 </script>
 </body>
 </html>

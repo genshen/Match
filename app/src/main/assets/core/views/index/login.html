@@ -1,0 +1,62 @@
+<style>
+    .demo-card-square.mdl-card {
+    width: 320px;
+    height: 320px;
+    }
+    .demo-card-square > .mdl-card__title {
+    color: #fff;
+    background:no-repeat #46B6AC;
+    /* url('public/images/dog.png') bottom right 15% */
+    }
+</style>
+<div id="app">
+    <!-- Square card -->
+    <div class="demo-card-square mdl-card mdl-shadow--2dp" style="margin:10% auto">
+        <div class="mdl-card__title mdl-card--expand">
+            <h2 class="mdl-card__title-text">登录验证</h2>
+        </div>
+
+        <form method="post" onsubmit="return sub()">
+            <div class="mdl-card__supporting-text">
+                请输入应用提供的授权码
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" name="code" type="text"
+                           pattern="-?[0-9]*(\.[0-9]+)?" id="code">
+                    <label class="mdl-textfield__label" for="code">授权码</label>
+                    <span class="mdl-textfield__error">授权码必须是数字!</span>
+                </div>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <button type="submit"
+                        class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    提交
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript" src="public/js/material.min.js"></script>
+    <script type="text/javascript">
+     function sub(){
+     $.post("index/login.html",{code:$("#code").val()},function(result){
+        if(result == 1){
+           location.replace("index/index.html");
+        }else{
+             var snackbarContainer = document.querySelector('#snackbar-container');
+             var data = {
+                message: '授权码错误',
+                timeout: 2000,
+                actionText: 'OK'
+            };
+            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+        }
+      });
+      return false;
+     }
+    </script>
+
+    <div id="snackbar-container" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+</div>

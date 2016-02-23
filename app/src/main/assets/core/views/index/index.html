@@ -1,56 +1,220 @@
-<div id="app">
-    <style>
-        .demo-card-wide.mdl-card {
-            width: 512px;
-            margin: 30px;
-        }
-        .demo-card-wide > .mdl-card__title {
-            color: #fff;
-            height: 176px;
-            background: url('public/images/welcome_card.jpg') center / cover;
-        }
-        .demo-card-wide > .mdl-card__menu {
-            color: #fff;
-        }
-    </style>
+<style>
+    .mdl-button--fab{position:fixed;right:60px;bottom:40px;z-index:100}
+    .demo-card-wide.mdl-card {width: 80%;margin: 50px auto;}
+    .demo-card-wide > .mdl-card__menu {color: #23ADE3;}
+    .disk-item{text-align:center}
+    .disk-item a{color:rgba(0,0,0,.54);}
+    main{background-color: rgb(252, 252, 252);}
+    @media only screen and (min-width: 600px) {
+    .disk-item{padding:0 16px 0 16px;}
+    }
 
+    .m_file{margin:10px 0}
+    #usage-chart{margin-right:15px;}
+    #classify-files{margin-left:15px;}
+</style>
+
+<div id="app">
     <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">Welcome</h2>
-        </div>
+        <!--<div class="mdl-card__title">-->
+        <!--<h2 class="mdl-card__title-text">Welcome</h2>-->
+        <!--</div>-->
         <div class="mdl-card__supporting-text">
             <!--Content-->
-            <ul>
-                <li v-for="todo in todos">
-                    {{ todo.text }}
-                </li>
-            </ul>
+            <div class="row">
+                <div class="col s6 m4 l3 disk-item">
+                    <div class="waves-effect" onclick="jump('app/index.html')">
+                         <img src="public/images/filesystem_icon_apk.png" alt="app" class="responsive-img"/>
+                         <p>应用({{apps.count}})</p>
+                    </div>
+                </div>
+                <div class="col s6 m4 l3 disk-item">
+                    <div class="waves-effect"  onclick="jump('images/index.html')">
+                        <img src="public/images/filesystem_icon_photo.png" alt="photo" class="responsive-img"/>
+                        <p>图片({{images.count}})</p>
+                    </div>
+                </div>
+                <div class="col s6 m4 l3 disk-item">
+                    <div class="waves-effect" onclick="jump('audio/index.html')">
+                        <img src="public/images/filesystem_icon_music.png" alt="music" class="responsive-img"/>
+                        <p>音乐({{audio.count}})</p>
+                    </div>
+                </div>
+                <div class="col s6 m4 l3 disk-item">
+                    <div class="waves-effect"  onclick="jump('video/index.html')">
+                        <img src="public/images/filesystem_icon_movie.png" alt="video" class="responsive-img"/>
+                        <p>视频({{video.count}})</p>
+                    </div>
+                </div>
+                <div class="col s6 m4 l3 disk-item">
+                    <div class="waves-effect"  onclick="jump('other/index.html#document')">
+                        <img src="public/images/filesystem_icon_word.png" alt="documents" class="responsive-img"/>
+                        <p>文档({{document.count}})</p>
+                    </div>
+                </div>
+                <div class="col s6 m4 l3 disk-item">
+                    <div class="waves-effect" onclick="jump('other/index.html#zip')">
+                        <img src="public/images/filesystem_icon_rar.png" alt="rar" class="responsive-img"/>
+                        <p>压缩包({{zip.count}})</p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align:center;" >
+                <p>SD卡使用情况</p>
+                <canvas id="usage-chart" width="180"  height="180"></canvas>
+                <canvas id="classify-files" width="180"  height="180"></canvas>
+            </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                Get Started
+            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="files/index.html">
+               查看SD卡文件
             </a>
         </div>
         <div class="mdl-card__menu">
             <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                <i class="material-icons">share</i>
+                <i class="material-icons">more_vert</i>
             </button>
         </div>
     </div>
 
-    <!-- Simple MDL Progress Bar -->
-    <div id="p1" class="mdl-progress mdl-js-progress"></div>
-    <script>
-        document.querySelector('#p1').addEventListener('mdl-componentupgraded', function() {
-            this.MaterialProgress.setProgress(44);
-        });
+    <button data-target="bottom-modal"
+            class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored modal-trigger">
+        <i class="material-icons">add</i>
+    </button>
+
+    <div id="toast-t" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.modal-trigger').leanModal();
+
+        var red = "#bf616a",
+		    blue = "#5B90BF",
+		    orange = "#d08770",
+		    yellow = "#ebcb8b",
+		    green = "#a3be8c",
+		    teal = "#96b5b4",
+		    pale_blue = "#8fa1b3",
+		    purple = "#b48ead",
+		    brown = "#ab7967";
+
+        var ctx = document.getElementById("usage-chart").getContext("2d");
+        var char_data = [
+            {
+            value: DATA['data']['free_space'],
+            color:"#2c9c69",
+            highlight:  Colour("#2c9c69",10),
+            label: "未使用"
+            },
+            {
+            value: DATA['data']['total_space'] - DATA['data']['free_space'],
+            color: "#dbba34",
+            highlight:  Colour("#dbba34",10),
+            label: "已使用"
+            }
+            ]
+        var myDoughnutChart = new Chart(ctx).Pie(char_data,{tooltipFontSize: 14,tooltipTemplate : " <%= label %>: <% if(value<1024*1024*1024){ %> <%= (value/1024/1024).toFixed(2) %>MB <% }else{%> <%= (value/1024/1024/1024).toFixed(2) %>GB<% }%>" });
+
+        var canvas = document.getElementById('classify-files'),
+			colours = {
+				"app": blue,
+				"image": orange,
+				"audio": teal,
+				"video": purple,
+				"document": brown,
+				"zip": green,
+				"other": yellow
+			};
+
+		var moduleData = [
+			{
+				value: DATA['data']['apps']['size'],
+				color: colours["app"],
+				highlight: Colour(colours["app"], 10),
+				label: "应用"
+			},
+			{
+				value: DATA['data']['images']['size'],
+				color: colours["image"],
+				highlight: Colour(colours["image"], 10),
+				label: "图片"
+			},
+			{
+				value: DATA['data']['audio']['size'],
+				color: colours["audio"],
+				highlight: Colour(colours["audio"], 10),
+				label: "音乐"
+			},
+			{
+				value: DATA['data']['video']['size'],
+				color: colours["video"],
+				highlight: Colour(colours["video"], 10),
+				label: "视频"
+			},
+			{
+				value:  DATA['data']['document']['size'],
+				color: colours["document"],
+				highlight: Colour(colours["document"], 10),
+				label: "文档"
+			},
+			{
+				value:  DATA['data']['zip']['size'],
+				color: colours["zip"],
+				highlight: Colour(colours["zip"], 10),
+				label: "压缩包"
+			},
+			{
+				value: DATA['data']['total_space'] - DATA['data']['free_space']-DATA['data']['apps']['size']
+				       - DATA['data']['images']['size']-DATA['data']['audio']['size'] - DATA['data']['zip']['size']
+				       - DATA['data']['video']['size']-DATA['data']['document']['size'],
+				color: colours["other"],
+				highlight: Colour(colours["other"], 10),
+				label: "其他"
+			}
+		];
+		var moduleDoughnut = new Chart(canvas.getContext('2d')).Doughnut(moduleData,{tooltipFontSize: 14,tooltipTemplate : " <%= label %>: <% if(value<1024*1024*1024){ %> <%= (value/1024/1024).toFixed(2) %>MB <% }else{%> <%= (value/1024/1024/1024).toFixed(2) %>GB<% }%>" });
+    });
+
+    function Colour(col, amt) {
+
+		var usePound = false;
+
+		if (col[0] == "#") {
+			col = col.slice(1);
+			usePound = true;
+		}
+
+		var num = parseInt(col,16);
+
+		var r = (num >> 16) + amt;
+
+		if (r > 255) r = 255;
+		else if  (r < 0) r = 0;
+
+		var b = ((num >> 8) & 0x00FF) + amt;
+
+		if (b > 255) b = 255;
+		else if  (b < 0) b = 0;
+
+		var g = (num & 0x0000FF) + amt;
+
+		if (g > 255) g = 255;
+		else if (g < 0) g = 0;
+
+		return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
+	}
+	function jump(destination) {
+	   window.setTimeout(function(){
+	      window.location = destination;
+	   },200)
+	}
+
     </script>
-    <i class="material-icons orange600">face</i>
-
-    <form  method="post" enctype="multipart/form-data">
-        <input type="file" name="hello">
-        <input type="text" name="name">
-        <button type="submit">Submit</button>
-    </form>
-
+    <script type="text/javascript" src="public/js/chart.min.js"></script>
+    <script type="text/javascript" src="public/js/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="public/js/dmuploader.min.js"></script>
+    <script type="text/javascript" src="public/js/file_upload.js"></script>
 </div>

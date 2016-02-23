@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.holo.m.tools.Tools;
 import com.holo.match.R;
+import com.holo.web.tools.AndroidAPI;
 
 public class WebActivityFragment extends Fragment {
     AppCompatTextView address;
@@ -20,6 +21,8 @@ public class WebActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_web, container, false);
         address = (AppCompatTextView) rootView.findViewById(R.id.http_address);
+        AppCompatTextView code = (AppCompatTextView) rootView.findViewById(R.id.code);
+        code.setText(AndroidAPI.newCode());
         return rootView;
     }
 
