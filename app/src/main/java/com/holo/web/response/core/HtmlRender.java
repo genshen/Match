@@ -14,8 +14,7 @@ import java.io.InputStreamReader;
  * Created by cgs on 2016/2/14.
  */
 public class HtmlRender {
-    final static String host = AndroidAPI.getLocalIp();
-    final static byte[] BASE = ("<base href='http://" + host + ":" + Config.HttpPort + "/'/>").getBytes();
+    final static byte[] BASE = ("<base href='http://" + Config.HOST + ":" + Config.HttpPort + "/'/>").getBytes();
     BufferedOutputStream bos;
     String template;
     JSONObject data;
@@ -27,6 +26,31 @@ public class HtmlRender {
         this.data = data;
     }
 
+    public HtmlRender( BufferedOutputStream bos) {
+        this.bos = bos;
+    }
+
+    public void renderLayout() {
+        InputStreamReader is_r = new InputStreamReader(AndroidAPI.getResource(Config.View.VIEW_LAYOUT));
+        BufferedReader br_r = new BufferedReader(is_r);
+        String line;
+        try {
+            for(int i =0;i<3;i++){
+                line = br_r.readLine();
+                bos.write(line.getBytes());
+                bos.write(newline);
+            }
+            // base tag!
+            bos.write(BASE);
+            bos.write(newline);
+            while ((line = br_r.readLine()) != null) {
+                bos.write(line.getBytes());
+                bos.write(newline);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void render() {
         try {
             InputStreamReader is_r = new InputStreamReader(AndroidAPI.getResource(Config.View.VIEW_LAYOUT));

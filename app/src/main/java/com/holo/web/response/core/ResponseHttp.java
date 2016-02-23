@@ -2,6 +2,8 @@ package com.holo.web.response.core;
 
 import com.holo.web.request.RequestHeader;
 import com.holo.web.request.RequestType;
+import com.holo.web.response.controllers.Errors;
+import com.holo.web.response.core.session.HttpSession;
 import com.holo.web.response.error.NotFoundError;
 import com.holo.web.tools.AndroidAPI;
 import com.holo.web.tools.StringTools;
@@ -21,6 +23,7 @@ import java.lang.reflect.Method;
 public class ResponseHttp {
     String request_url;
     RequestHeader header;
+    final static String AssetsFileStart = "/public";
     final RequestType requestType;
 
     public ResponseHttp(RequestHeader rh) {
@@ -32,9 +35,13 @@ public class ResponseHttp {
     public void startResponse(OutputStream outputStream) {
         if (requestType != RequestType.MEDIA) {
             BuiltTextResponse(outputStream);
-        } else {
+        } else if (!request_url.startsWith(AssetsFileStart)) {
+               //medias generated dynamically
+            generateMedia(outputStream);
+        } else {  //medias  in assets or
             BuiltMediaResponse(outputStream);
         }
+
     }
 
     private void BuiltMediaResponse(OutputStream os) {
@@ -97,19 +104,35 @@ public class ResponseHttp {
 
     private void RenderHtml(OutputStream os) {
         Router router = new Router(request_url);
+        HttpSession session = new HttpSession(header.getHeaderValueByKey(HttpSession.Cookie));
         try {
             Class c = Class.forName(Config.ControllerConfig.ControllerPackage + router.controller);
-            Constructor constructor = c.getDeclaredConstructor(OutputStream.class);
-            Object obj = constructor.newInstance(os);
+            Constructor constructor = c.getDeclaredConstructor(OutputStream.class, RequestHeader.class, HttpSession.class);
+            Object obj = constructor.newInstance(os, header, session);
             Method method = c.getDeclaredMethod(router.action + Config.ControllerConfig.Action);
             method.invoke(obj);
         } catch (Exception e) {
             e.printStackTrace();
-            NotFoundError notFound = new NotFoundError(os);
-            notFound.render(request_url);
+            Errors error404 = new Errors(os, header, session);
+            error404.notFoundAction(request_url, true);
         }
     }
 
+    private void generateMedia(OutputStream os) {
+        Router router = new Router(request_url,null);
+        HttpSession session = new HttpSession(header.getHeaderValueByKey(HttpSession.Cookie));
+        try {
+            Class c = Class.forName(Config.ControllerConfig.ControllerPackage + router.controller);
+            Constructor constructor = c.getDeclaredConstructor(OutputStream.class, RequestHeader.class, HttpSession.class);
+            Object obj = constructor.newInstance(os, header, session);
+            Method method = c.getDeclaredMethod(router.action + Config.ControllerConfig.Media);
+            method.invoke(obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Errors error404 = new Errors(os, header, session);
+            error404.notFoundAction(request_url, false);
+        }
+    }
     private boolean CheckModify(OutputStream os, long lastModify) {
         if (!StringTools.CheckModify(header.getHeaderValueByKey("If-Modified-Since"), lastModify)) {
             try {
