@@ -1,5 +1,7 @@
 package com.holo.web.request.data;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +14,11 @@ public class BasicData {
     public String getString(String name) {
         Object o = data.get(name);
         if (o != null) {
-            return o.toString().replaceAll("%20"," ");// space
+            try {
+                return URLDecoder.decode(o.toString(), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         return "";
     }

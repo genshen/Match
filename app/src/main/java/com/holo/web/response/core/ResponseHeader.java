@@ -25,6 +25,7 @@ public class ResponseHeader {
     public final static String Content_Length = "Content-Length";
     public final static String Content_Type = "Content-Type";
     public final static String Content_Transfer_Encoding = "Content-Transfer-Encoding";
+    public final static  byte[] server = "Server: Match 1.0 \r\n".getBytes();
     String first_line = STATE_OK;
     Map<String, String> heads = new HashMap<>();
 
@@ -37,6 +38,7 @@ public class ResponseHeader {
                 m = en.next();
                 bos.write((m.getKey() + ":" + m.getValue() + "\r\n").getBytes());
             }
+            bos.write(server);
             bos.write("\r\n".getBytes());
             bos.flush();
         } catch (IOException e) {

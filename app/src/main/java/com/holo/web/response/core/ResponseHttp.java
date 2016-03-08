@@ -9,10 +9,8 @@ import com.holo.web.tools.AndroidAPI;
 import com.holo.web.tools.StringTools;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -33,15 +31,14 @@ public class ResponseHttp {
     }
 
     public void startResponse(OutputStream outputStream) {
-        if (requestType != RequestType.MEDIA) {
-            BuiltTextResponse(outputStream);
+        if (requestType == RequestType.HTML) {
+            RenderHtml(outputStream);
         } else if (!request_url.startsWith(AssetsFileStart)) {
                //medias generated dynamically
             generateMedia(outputStream);
-        } else {  //medias  in assets or
+        } else {  //medias in assets or
             BuiltMediaResponse(outputStream);
         }
-
     }
 
     private void BuiltMediaResponse(OutputStream os) {
@@ -57,7 +54,7 @@ public class ResponseHttp {
                 BufferedInputStream bis = new BufferedInputStream(is);
                 byte byt[] = new byte[2048];
                 int length;
-                os.write(("HTTP/1.1 200 OK\r\nLast-Modified: " + StringTools.formatModify(lastModify) + "\r\n\r\n").getBytes());
+                os.write(("HTTP/1.1 200 OK\r\nLast-Modified: " + StringTools.formatModify(lastModify) + "\r\nServer: Match 1.0\r\n\r\n").getBytes());
                 while ((length = bis.read(byt)) != -1) {
                     os.write(byt, 0, length);
                 }
@@ -70,37 +67,6 @@ public class ResponseHttp {
     }
 
     final byte[] newline = {'\r', '\n'};
-
-    private void BuiltTextResponse(OutputStream os) {
-        if (requestType == RequestType.HTML) {
-            RenderHtml(os);
-            return;
-        }
-
-        InputStream is = AndroidAPI.getResource(request_url);
-        if (is == null) {
-            new NotFoundError(os);
-            return;
-        }
-        try {
-            long lastModify = Config.ReleaseTime;
-            if (CheckModify(os, lastModify)) {
-                InputStreamReader is_r = new InputStreamReader(is, "UTF-8");
-                BufferedReader br_r = new BufferedReader(is_r);
-                String line;
-                os.write(("HTTP/1.1 200 OK\r\nLast-Modified: " + StringTools.formatModify(lastModify) + "\r\n\r\n").getBytes());
-                while ((line = br_r.readLine()) != null) {
-                    os.write(line.getBytes("UTF-8"));
-                    os.write(newline);
-                }
-                br_r.close();
-                is_r.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("send finished\t" + request_url);
-    }
 
     private void RenderHtml(OutputStream os) {
         Router router = new Router(request_url);
@@ -119,7 +85,7 @@ public class ResponseHttp {
     }
 
     private void generateMedia(OutputStream os) {
-        Router router = new Router(request_url,null);
+        Router router = new Router(request_url);
         HttpSession session = new HttpSession(header.getHeaderValueByKey(HttpSession.Cookie));
         try {
             Class c = Class.forName(Config.ControllerConfig.ControllerPackage + router.controller);

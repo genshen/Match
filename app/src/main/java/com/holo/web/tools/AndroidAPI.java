@@ -35,6 +35,7 @@ public class AndroidAPI {
     public static Context context;
     public static ContentResolver contentResolver;
     public static String entryCode;
+    public static String SD_ROOT_DIR = FileManager.getSDPath();
 
     public static String getLocalIp() {
         return Tools.getLocalHostIp();
@@ -152,6 +153,7 @@ public class AndroidAPI {
 
     /**
      * get all images info
+     *
      * @return JSONArray
      */
     public static JSONArray getImageList() {
@@ -228,17 +230,16 @@ public class AndroidAPI {
     }
 
     /**
-     *
-     * @param origId origId in images table
-     * @param kind  MINI_KIND or MICRO_KIND
+     * @param origId  origId in images table
+     * @param kind    MINI_KIND or MICRO_KIND
      * @param isImage image or video
      * @return Bitmap
      */
-    public static Bitmap getThumb(long origId,int kind,boolean isImage) {
-        if(isImage){
-            return  MediaStore.Images.Thumbnails.getThumbnail(contentResolver, origId, kind, null);
+    public static Bitmap getThumb(long origId, int kind, boolean isImage) {
+        if (isImage) {
+            return MediaStore.Images.Thumbnails.getThumbnail(contentResolver, origId, kind, null);
         }
-        return  MediaStore.Video.Thumbnails.getThumbnail(contentResolver, origId, kind, null);
+        return MediaStore.Video.Thumbnails.getThumbnail(contentResolver, origId, kind, null);
     }
 
     static Uri[] tables = {MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -254,28 +255,27 @@ public class AndroidAPI {
     public static MediaInfo getMediaLocation(long id, int type) {
         MediaInfo mediainfo = new MediaInfo();
         Cursor cursor = contentResolver.query(tables[type], new String[]{MediaStore.MediaColumns.DATA,
-                        MediaStore.MediaColumns.SIZE,MediaStore.MediaColumns.MIME_TYPE},
+                        MediaStore.MediaColumns.SIZE, MediaStore.MediaColumns.MIME_TYPE},
                 MediaStore.MediaColumns._ID + "=" + id, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             mediainfo.file = new File(cursor.getString(0));
             mediainfo.mime = cursor.getString(2);
             return mediainfo;
         }
-        if(cursor != null){
+        if (cursor != null) {
             cursor.close();
         }
         return mediainfo;
     }
 
-    static String root_dir = FileManager.getSDPath();
     static final String NAME = "name";
     static final String FILE_SIZE = "size";
     static final String LAST_MODIFY = "last_modify";
     static final String IS_DIR = "is_dir";
     //    final String FILE_ICON = "icon";
 
-    public static JSONArray getFileList() {
-        return new JSONArray(getFileChildren(new File(root_dir+"")));
+    public static JSONArray getFileList(String path) {
+        return new JSONArray(getFileChildren(new File(SD_ROOT_DIR + path)));
     }
 
     private static List<Map<String, Object>> getFileChildren(File dir) {

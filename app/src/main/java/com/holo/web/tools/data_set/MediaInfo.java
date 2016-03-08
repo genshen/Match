@@ -8,6 +8,14 @@ import java.io.File;
 public class MediaInfo {
     public File file = null;
     public String mime = "";
+
+    public MediaInfo() {}
+
+    public MediaInfo(String path,String mime) {
+        file = new File(path);
+        this.mime  = mime;
+    }
+
     public boolean ilLegal(){
         return (file == null || !file.exists() || mime.isEmpty());
     }

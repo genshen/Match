@@ -24,11 +24,11 @@ public class Files extends Controller {
     }
 
     public void indexAction() {
-        int login = session.getSessionInt(LOGIN);
-        if (login != 1) {
-            redirect("index", "login");
-            return;
-        }
+//        int login = session.getSessionInt(LOGIN);
+//        if (login != 1) {
+//            redirect("index", "login");
+//            return;
+//        }
         JSONObject data = new JSONObject();
         try {
             data.put("title", "文件");
@@ -46,8 +46,9 @@ public class Files extends Controller {
         }
 
         JSONObject data = new JSONObject();
+        String path = getParams().getString("path");
         try {
-            data.put("files", AndroidAPI.getFileList());
+            data.put("files", AndroidAPI.getFileList(path));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -67,7 +68,6 @@ public class Files extends Controller {
         }
     }
 
-    //not html file returned
     public void downloadMedia() {
         int login = session.getSessionInt(LOGIN);
         if (login != 1) {
@@ -78,12 +78,24 @@ public class Files extends Controller {
         int file_type = getParams().getInt(FILE_TYPE);
         long file_id = getParams().getLong(FILE_ID);
         MediaInfo mediainfo = AndroidAPI.getMediaLocation(file_id, file_type);
-        if(mediainfo.ilLegal()){ // file not exist
-            notFound();
-            return;
-        }
         mediainfo.mime = "application/octet-stream";
         responseHead.setHeadValue(ResponseHeader.Content_Transfer_Encoding, "binary");
         outFile(mediainfo);
     }
+
+    public void anyAction() {
+        anyMedia();
+    }
+
+    public void anyMedia() {
+        int login = session.getSessionInt(LOGIN);
+        if (login != 1) {
+            forbidden();
+            return;
+        }
+        String path = getParams().getString("path");
+        responseHead.setHeadValue(ResponseHeader.Content_Transfer_Encoding, "binary");
+        outFile(AndroidAPI.SD_ROOT_DIR + path, "application/octet-stream");
+    }
+
 }

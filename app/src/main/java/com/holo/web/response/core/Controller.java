@@ -1,6 +1,7 @@
 package com.holo.web.response.core;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 
 import com.holo.web.request.RequestHeader;
 import com.holo.web.request.data.GetData;
@@ -116,8 +117,15 @@ public class Controller {
         renderJSON(json.toString());
     }
 
+    public void outFile(@NonNull String path,String mime){
+       outFile(new MediaInfo(path,mime));
+    }
 
     public void outFile(MediaInfo mediaInfo) {
+        if(mediaInfo.ilLegal()){
+            notFound();
+            return;
+        }
         byte[] b = new byte[1024];
         responseHead.setHeadValue(ResponseHeader.Content_Type, mediaInfo.mime);
         responseHead.setHeadValue(ResponseHeader.Content_Length, mediaInfo.file.length() + "");

@@ -1,39 +1,182 @@
+<style>
+    .mdl-button--fab{position:fixed;right:60px;bottom:40px;z-index:100}
+    .waves-effect-link{color: #757575;outline: none;}
+    .waves-effect-link:focus,.waves-effect-link:hover{color: #3F51B5;}
+    .waves-effect-link i{outline: none;font-size: 20px !important;}
+
+    .file-icon{width:50px;height:50px;}
+    #files-table td{padding:5px 5px;}
+    #spinner{position:fixed;left:50%;top:50%;}
+    .hidden{display:none}
+</style>
 <div id="app">
     <table class="striped">
         <thead>
         <tr>
             <th data-field="id">名称</th>
+            <th data-field="price">操作</th>
             <th data-field="name">大小</th>
-            <th data-field="price">Item Price</th>
         </tr>
         </thead>
         <tbody id="files-table">
 
         </tbody>
     </table>
-
+    <div class="empty-message">这里什么都没有...</div>
+    <div id="spinner" class="mdl-spinner mdl-js-spinner"></div>
+    <button data-target="bottom-modal"
+            class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored modal-trigger">
+        <i class="material-icons">add</i>
+    </button>
 </div>
 
 <script id="template" type="x-template">
     <tr  v-for="file in files">
-        <td>{{file.name}}</td>
+        <td>
+            <a v-if="file.is_dir" title="打开文件夹" href="javascript:enter( {{$index}} )">
+                <img v-bind:src="'public/images/'+file.icon"  class="file-icon">
+                {{file.name}}
+            </a>
+            <a v-else type="download" title="下载" href="files/any/{{file.name}}?path={{file.path}}">
+                <img v-bind:src="'public/images/'+file.icon"  class="file-icon">
+                {{file.name}}
+            </a>
+        </td>
+        <td>
+            <a v-if="file.is_dir" class="waves-effect-link" title="打开文件夹" href="javascript:enter({{$index}} )">
+                <i id="open-icon-{{file.name}}" class="waves-effect mdi mdi-arrow-right"></i>
+                <div class="mdl-tooltip" for="open-icon-{{file.name}}">
+                    打开
+                </div>
+            </a>
+            <a v-else type="download"  class="waves-effect-link" title="下载" href="files/any/{{file.name}}?path={{file.path}}">
+                <i id="download-icon-{{file.name}}" class="waves-effect mdi mdi-download"></i>
+                <div class="mdl-tooltip" for="download-icon-{{file.name}}">
+                    下载
+                </div>
+            </a>
+        </td>
         <td>{{file.size}}</td>
-        <td>$0.87</td>
     </tr>
 </script>
+<script type="text/javascript" src="public/js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="public/js/dmuploader.min.js"></script>
+<script type="text/javascript" src="public/js/file_upload.js"></script>
 <script type="text/javascript">
+    var BASE_URL = "/files/index.html?path=",canPushState = false;
+    var current_path = "",_path = "",all_files;
+    var loadSpinner;
     $(document).ready(function(){
-       getFileList("");
+        $('.modal-trigger').leanModal();
+        loadSpinner = $("#spinner");
+        getFileList(getUrlParamPath());
     });
 
     function getFileList(path){
-      $.get("../../files/file_list.html",{path:path}, function(result){
-        new Vue({
-          el: '#files-table',
-          replace: false,
-          data:result,
-          template: "#template"
-        })
-      },"json");
+      loadSpinner.addClass("is-active");
+      $(".empty-message").addClass("hidden");
+      $.ajax({url:"../../files/file_list.html",data:{path:path},dataType:"json",
+          success:function(result){
+              current_path = _path;
+              if(canPushState){
+                 newURL = BASE_URL + current_path;
+                 history.pushState(null, "文件", newURL);
+              }
+              all_files = processResult(result);
+              new Vue({
+                el: '#files-table',
+                replace: false,
+                data:all_files,
+                template: "#template"
+              });
+              if(getJsonArrayLength(all_files.files)==0){
+                  Toast("该文件夹是空的哟!");
+                  $(".empty-message").removeClass("hidden");
+              }
+          },
+          error:function(){
+              Toast("数据请求错误!");
+          },
+          complete:function(){
+              loadSpinner.removeClass("is-active");
+          }
+      });
+    }
+
+    function processResult(jsonData){
+       for(var key in jsonData.files){
+         jsonData.files[key].path = current_path+"/"+jsonData.files[key].name;
+         if(jsonData.files[key].is_dir){
+            jsonData.files[key].icon = "filesystem_icon_folder.png";
+         }else{
+            jsonData.files[key].icon = getFileIcon(jsonData.files[key].name);
+            jsonData.files[key].size = uniformFileSize(jsonData.files[key].size);
+         }
+       }
+       return jsonData;
+    }
+
+    function enter(index){
+       canPushState =true;
+       _path = all_files.files[index].path;
+       getFileList(_path);
+    }
+
+    $(window).on("popstate", function(event) {
+       canPushState = false;
+       var state = event.originalEvent.state;
+       getFileList(getUrlParamPath());
+    });
+
+    function getJsonArrayLength(jsonArr){
+      var length = 0;
+      for(var key in jsonArr){
+         length++;
+      }
+      return length;
+    }
+
+    var icons = ["filesystem_icon_word.png","filesystem_icon_apk.png","filesystem_icon_photo.png",
+            "filesystem_icon_excel.png","filesystem_icon_rar.png","filesystem_icon_web.png",
+            "filesystem_icon_text.png","filesystem_icon_music.png","filesystem_icon_movie.png",
+            "filesystem_icon_pdf.png","filesystem_icon_ppt.png","filesystem_icon_default.png"];
+    function getFileIcon(filename){
+       var ext = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+       switch(ext){
+               case "doc":return icons[0];case "apk":  return icons[1];case "bmp":   return icons[2];case "docx": return icons[0];
+               case "xls": return icons[3];case "xlsx": return icons[3];case "gif": return icons[2];case "gz":return icons[4];
+               case "htm":return icons[5];case "html": return icons[5];case "jpeg": return icons[2];case "jpg": return icons[2];
+               case "log": return icons[6];case "mp3":return icons[7];case "mp4":return icons[8];case "pdf":return icons[9];
+               case "png": return icons[2];case "ppt":return icons[10];case "pptx": return icons[10];case "tar":return icons[4];
+               case "tgz": return icons[4]; case "txt":return icons[6];case "wav":return icons[7];case "wmv": return icons[8];
+               case "wps":return icons[0];case "zip": return icons[4]; case "7z": return icons[4]; default: return icons[11];
+       }
+    }
+
+    var length_str = ["B", "KB", "MB", "GB", "TB"];
+    var radix = 1024;
+    function uniformFileSize(file_length){
+        var next = 0,i = 0;
+        while (parseInt(file_length / radix) > 0) {
+            next =  (file_length % radix);
+            file_length = parseInt(file_length / radix);
+            i++;
+        }
+        if (i == 0) {   return file_length + length_str[i];}
+        else { return file_length + "." + ((next >= 1000 ? 1 : parseInt(next / 100)) + "" + parseInt(next / 10) % 10) + length_str[i];
+        }
+    }
+
+    function Toast(message){
+         var snackbarContainer = document.querySelector('#toast-t');
+         var data = {message:message};
+         snackbarContainer.MaterialSnackbar.showSnackbar(data);
+    }
+
+    function getUrlParamPath(){
+       reg = /path=(\S+)/;
+       regMatch = reg.exec(location.search);
+       _path = decodeURI(regMatch === null ? "" : regMatch[1]);
+       return _path;
     }
 </script>
