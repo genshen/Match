@@ -1,0 +1,24 @@
+<style>
+    .tabs{ overflow: hidden;} /*don't show the scroll bar while there are only tabs*/
+</style>
+<div id="app">
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s6"><a href="#document">文档</a></li>
+                <li class="tab col s6"><a href="#zip">压缩包</a></li>
+            </ul>
+        </div>
+        <div id="document" class="col s12">
+            文档
+        </div>
+        <div id="zip" class="col s12">
+            压缩包
+        </div>
+    </div>
+
+    <button data-target="bottom-modal" style="position:fixed;right:60px;bottom:40px;z-index:100"
+            class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored modal-trigger">
+        <i class="material-icons">add</i>
+    </button>
+</div>

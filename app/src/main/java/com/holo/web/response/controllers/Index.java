@@ -14,7 +14,6 @@ import java.io.OutputStream;
  * Created by cgs on 2016/2/12.
  */
 public class Index extends Controller {
-    final String LOGIN = "login";
 
     public Index(OutputStream os, RequestHeader header, HttpSession session) {
         super(os, header, session);
@@ -44,7 +43,6 @@ public class Index extends Controller {
         }
         render("index/index.html", data);
     }
-
 
     public void loginAction() {
         //if has login

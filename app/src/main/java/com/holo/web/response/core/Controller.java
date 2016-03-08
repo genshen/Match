@@ -1,10 +1,14 @@
 package com.holo.web.response.core;
 
+import android.graphics.Bitmap;
+
 import com.holo.web.request.RequestHeader;
 import com.holo.web.request.data.GetData;
 import com.holo.web.request.data.PostData;
 import com.holo.web.response.core.session.HttpSession;
+import com.holo.web.tools.AndroidAPI;
 import com.holo.web.tools.URL;
+import com.holo.web.tools.data_set.MediaInfo;
 
 import org.json.JSONObject;
 
@@ -18,6 +22,7 @@ import java.io.OutputStream;
  * Created by cgs on 2016/2/12.
  */
 public class Controller {
+    public final String LOGIN = "login";
     public boolean pjax;
     public BufferedOutputStream bos;
     public ResponseHeader responseHead;
@@ -57,8 +62,18 @@ public class Controller {
         responseHead.Out(bos);
     }
 
-    public void forbidden(){
+    public void forbidden() {
         responseHead.setState(ResponseHeader.FORBIDDEN);
+        responseHead.Out(bos);
+    }
+
+    public void notFound() {
+        responseHead.setState(ResponseHeader.NOT_FOUND);
+        responseHead.Out(bos);
+    }
+
+    public void badRequest() {
+        responseHead.setState(ResponseHeader.Bad_Request);
         responseHead.Out(bos);
     }
 
@@ -85,22 +100,30 @@ public class Controller {
     }
 
     public void renderJSON(String json) {
+        byte[] jsonBytes = (json).getBytes();
         responseHead.setHeadValue("Content-Type", "application/json; charset=utf-8");
-        responseHead.setHeadValue("Content-Length", "" + json.length());
+        responseHead.setHeadValue("Content-Length", "" + jsonBytes.length);
         responseHead.Out(bos);
         try {
-            bos.write((json).getBytes());
+            bos.write(jsonBytes);
             bos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void outFile(String path) {
+    public void renderJSON(JSONObject json){
+        renderJSON(json.toString());
+    }
+
+
+    public void outFile(MediaInfo mediaInfo) {
         byte[] b = new byte[1024];
+        responseHead.setHeadValue(ResponseHeader.Content_Type, mediaInfo.mime);
+        responseHead.setHeadValue(ResponseHeader.Content_Length, mediaInfo.file.length() + "");
         responseHead.Out(bos);
         try {
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(path));
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(mediaInfo.file));
             while ((bis.read(b)) != -1) {
                 bos.write(b);
             }
@@ -108,5 +131,15 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void outThumbByOrigId(long origId, int kind,boolean isImage){
+        Bitmap bitmap = AndroidAPI.getThumb(origId, kind,isImage);
+        if(bitmap == null){
+            notFound();
+            return;
+        }
+        responseHead.setHeadValue(ResponseHeader.Content_Type,"image/png");
+        bitmap.compress(Bitmap.CompressFormat.PNG,50,bos);
     }
 }

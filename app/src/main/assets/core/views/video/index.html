@@ -1,0 +1,102 @@
+<style>
+    .card-title {font-size: 20px;}
+    .video-title{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 100%;display: block;}
+    .video-detail{margin-top:18px;}
+    .video-detail td:first-child{width:60px}
+    .video-detail td{padding: 0;}
+
+    .action-bar a{color: #757575;outline: none;}
+    .action-bar a:focus,.action-bar a:hover{color: #3F51B5;}
+    .action-bar a i{outline: none;font-size: 20px !important;}
+
+    #video-m{display:none;z-index:2000;position:fixed;width:60%;left: 20%;top:10%;}
+    .l-overlay{position: fixed;z-index: 1999;top: 0;left: 0;bottom: 0;right: 0;
+               height: 100%;width: 100%;background: #000;display: block;opacity: 0.5;}
+</style>
+<div id="app">
+    <div class="row">
+        <div class="col s6 m4 l3" v-for="video in videos">
+            <div class="card">
+                <div class="card-image waves-effect waves-block wave-light">
+                    <img class="activator" v-bind:src="'video/thumb/' + video.id+ '.jpg?id=' + video.id"/>
+                </div>
+                <div class="card-content">
+                    <span title="{{video.display_name}}" class="card-title video-title activator grey-text text-darken-4">
+                        {{video.title}}
+                    </span>
+
+                    <div class="action-bar">
+                        <a type="download" href="files/download/{{video.display_name}}?id={{video.id}}&type=2">
+                            <i id="download-icon-{{video.id}}" class="waves-effect mdi  mdi-download"></i>
+                            <div class="mdl-tooltip" for="download-icon-{{video.id}}">下载</div>
+                        </a>
+                        <a type="download" href="javascript:loadVideo({{$index}})">
+                            <i id="play-icon-{{video.id}}" class="waves-effect mdi mdi-play-circle"></i>
+                            <div class="mdl-tooltip" for="play-icon-{{video.id}}">播放</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-reveal">
+                    <span class="card-title activator grey-text text-darken-4">
+                        视频详情<i class="right mdi mdi-close"></i>
+                    </span>
+                    <table class="video-detail">
+                        <tbody>
+                        <tr><td>文件名</td><td>{{video.display_name}}</td></tr>
+                        <tr><td>艺术家</td><td>{{video.artist}}</td></tr>
+                        <tr><td>大小</td><td>{{video.size_show}}</td></tr>
+                        <tr><td>时长</td><td>{{video.duration}}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="video-m">
+        <video width="100%" id="video-player" src="" controls="controls">
+            您的浏览器不支持 video 标签。
+        </video>
+    </div>
+
+    <button data-target="bottom-modal" style="position:fixed;right:60px;bottom:40px;z-index:100"
+            class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored modal-trigger">
+        <i class="material-icons">add</i>
+    </button>
+</div>
+<script type="text/javascript" src="public/js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="public/js/dmuploader.min.js"></script>
+<script type="text/javascript" src="public/js/file_upload.js"></script>
+<script type="text/javascript">
+       var video_player, video_box;
+       $(document).ready(function(){
+          $('.modal-trigger').leanModal();
+
+          var html = document.getElementById("video-m").outerHTML;
+          $("#video-m").remove();
+          $('body').prepend(html);
+
+          video_box = $("#video-m");
+          video_player = document.getElementById("video-player");
+       });
+
+       function loadVideo(index){
+            openM();
+            video_player.src = 'video/play/' + DATA['data']['videos'][index]['display_name'] +
+              '?id='+ DATA['data']['videos'][index]['id'] +'&type=2';
+            video_player.load();
+            video_player.play();
+       }
+
+       function openM(){
+           video_box.css('display','block');
+           $('body').prepend('<div class="l-overlay" onclick="dismiss(this)"></div>');
+       }
+
+       function dismiss(t){
+          $(t).remove();
+          video_box.css('display','none');
+          video_player.pause();
+       }
+</script>

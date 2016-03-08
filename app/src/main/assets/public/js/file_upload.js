@@ -16,7 +16,7 @@ var da = {message: m};
 snackbarContainer.MaterialSnackbar.showSnackbar(da);
  }
 
-$('#app').dmUploader({
+$('#main-container').dmUploader({
         url: '../../files/upload.html',
         dataType: 'json',
         allowedTypes: '*',

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
     <link rel="stylesheet" href="/public/css/icon.css">
+    <link rel="stylesheet" href="/public/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="/public/css/materialize.css">
     <link rel="stylesheet" href="/public/css/material.indigo-red.min.css">
     <script type="text/javascript" src="public/js/jquery-2.1.1.min.js"></script>
@@ -13,10 +14,14 @@
 <div id="bottom-modal" class="modal bottom-sheet">
     <div class="modal-content">
         <h4>任务栏</h4>
-        <div class="row">
+        <div class="row" id="bottom-modal-content">
             <div id="file-upload-modal" class="col s12 m6 l4"></div>
         </div>
     </div>
+</div>
+<div id="toast-t" class="mdl-js-snackbar mdl-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
 </div>
 <!-- Always shows a header, even in smaller screens. -->
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
@@ -48,9 +53,8 @@
             <a class="mdl-navigation__link" href="files/index.html">文件</a>
         </nav>
     </div>
-    <main class="mdl-layout__content">
-        <div id="main-container">
-        </div>
+    <main class="mdl-layout__content"  id="main-container">
+
     </main>
 </div>
 <script type="text/javascript" src="public/js/vue.js"></script>

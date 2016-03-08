@@ -1,6 +1,12 @@
 <style>
-    td a{color: #3F51B5;}
-    td a:focus,td a:hover{color: #303F9F;}
+    td a{color: #757575;outline: none;}
+    td a:focus,td a:hover{color: #3F51B5;}
+    td a i{outline: none;font-size: 20px !important;}
+    .music-box-btn {text-align: center;}
+
+    .music-box-btn i {font-size: 40px;color: rgb(63, 81, 181);cursor: pointer;
+                    vertical-align: middle;border-radius: 50%;padding: 6px}
+    .music-box-btn .big-control-btn {font-size: 60px;}
 </style>
 <div id="app">
     <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
@@ -17,15 +23,15 @@
         <tr v-for="music in musics">
             <td>
                 <a type="download" href="files/download/{{music.display_name}}?id={{music.id}}&type=1">
-                    <span id="tt4" class="icon material-icons">get_app_black</span>
-                    <div class="mdl-tooltip" for="tt4">
-                        Download
+                    <i id="download-icon-{{music.id}}" class="waves-effect mdi  mdi-download"></i>
+                    <div class="mdl-tooltip" for="download-icon-{{music.id}}">
+                        下载
                     </div>
                 </a>
-                <a type="download" href="javascript:window.alert('hello world')">
-                    <span id="tt4" class="icon material-icons">ic_play_circle_filled_black</span>
-                    <div class="mdl-tooltip" for="tt4">
-                        play
+                <a type="download" href="javascript:play({{$index}},true)">
+                    <i id="play-icon-{{music.id}}" class="waves-effect mdi mdi-play-circle"></i>
+                    <div class="mdl-tooltip" for="play-icon-{{music.id}}">
+                        播放
                     </div>
                 </a>
             </td>
@@ -37,21 +43,132 @@
         </tbody>
     </table>
 
+    <audio id="music-audio" src="" onended="loadNext()" ontimeupdate="refreshSlide()" onplaying="refreshSlideText()">
+        您的浏览器不支持 audio 标签。
+    </audio>
+
+    <div id="music-box" class="col s12 m6 l4">
+        <div id="music-slide">
+            <span>00:00</span> <span style="float: right;">00:00</span>
+            <input id="music-slide-range" class="mdl-slider mdl-js-slider" onchange="slide(this)" type="range" min="0" max="100" value="0" tabindex="0">
+        </div>
+        <div class="music-box-btn">
+            <i class="mdi waves-effect mdi-skip-previous" title="上一首" onclick="loadPre()"></i>
+            <i id="play-or-pause" class="mdi waves-effect big-control-btn mdi-play-circle-outline" title="播放/暂停" onclick="playOrPause()"></i>
+            <i class="mdi waves-effect mdi-skip-next" title="下一首" onclick="loadNext()"></i>
+        </div>
+    </div>
+
     <button data-target="bottom-modal" style="position:fixed;right:60px;bottom:40px;z-index:100"
             class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored modal-trigger">
         <i class="material-icons">add</i>
     </button>
 
-    <div id="toast-t" class="mdl-js-snackbar mdl-snackbar">
-        <div class="mdl-snackbar__text"></div>
-        <button class="mdl-snackbar__action" type="button"></button>
-    </div>
     <script type="text/javascript" src="public/js/jquery-migrate-1.2.1.min.js"></script>
     <script type="text/javascript" src="public/js/dmuploader.min.js"></script>
     <script type="text/javascript" src="public/js/file_upload.js"></script>
     <script type="text/javascript">
-    $(document).ready(function(){
-       $('.modal-trigger').leanModal();
-    });
+       var play_btn, music, current_music_index = 0;
+       $(document).ready(function(){
+          $('.modal-trigger').leanModal();
+
+          var html = document.getElementById("music-box").outerHTML;
+          $("#music-box").remove();
+          $('#bottom-modal-content').prepend(html);
+
+          music = document.getElementById("music-audio");
+          play_btn = $("#play-or-pause");
+       });
+
+        function play(index,refresh,error_message) {
+            if (index >= getJsonArrayLength(DATA['data']['musics']) || index < 0) { // error index
+                var snackbarContainer = document.querySelector('#toast-t');
+                var data = {message: error_message};
+                snackbarContainer.MaterialSnackbar.showSnackbar(data);
+                return;
+            }
+            var name = DATA['data']['musics'][index]['display_name'];
+            var id = DATA['data']['musics'][index]['id'];
+            music.src = "audio/audio/" + name + "?id=" + id + "&type=1";
+            music.load();
+            music.play();
+            current_music_index = index;
+            if (refresh) {
+                $(".lean-overlay").remove();
+                $('#bottom-modal').openModal();
+            }
+
+            play_btn.removeClass("mdi-play-circle-outline");
+            play_btn.addClass("mdi-pause");
+        }
+
+        function loadPre() {
+            play(current_music_index - 1, false, "这已经是第一首了");
+        }
+
+        function loadNext() {
+            play(current_music_index + 1, false, "这已经是最后一首了");
+        }
+
+        function slide(slide) {
+            if (music.readyState == 0) {
+                slide.value = 0;
+                return;
+            }
+            music.currentTime = parseInt(music.duration * slide.value / 100);
+            refreshSlideText();
+        }
+
+         function playOrPause() {
+            if (music.readyState == 0) {
+                return;
+            }
+            if (play_btn.hasClass("mdi-pause")) {
+                play_btn.removeClass("mdi-pause");
+                play_btn.addClass("mdi-play-circle-outline");
+                music.pause();
+            } else if (play_btn.hasClass("mdi-play-circle-outline")) {
+                play_btn.removeClass("mdi-play-circle-outline");
+                play_btn.addClass("mdi-pause");
+                music.play();
+            }
+        }
+
+        var last_playing_time = 0;
+        function refreshSlide() {
+            var playing_time_now = parseInt(music.currentTime);
+            if (playing_time_now != last_playing_time) {
+                var v = document.getElementById("music-slide-range");
+                var newValue = parseInt(music.currentTime / music.duration * 100);
+                v.MaterialSlider.change(newValue);
+                refreshSlideText();
+            }
+            last_playing_time = playing_time_now;
+        }
+
+        function refreshSlideText() {
+            var spans = $("#music-slide").children();
+            spans.eq(0).text(toDurationTime(music.currentTime));
+            spans.eq(1).text(toDurationTime(music.duration));
+        }
+
+        function getJsonArrayLength(jsonArray) {
+            var length = 0;
+            for (var j in jsonArray) {
+                length++;
+            }
+            return length;
+        }
+        function toDurationTime(time) {
+            time = parseInt(time);
+            var sec = time % 60;
+            time = parseInt(time / 60);
+            var min = time % 60;
+            time = parseInt(time / 60);
+            var hour = time % 60;
+            return (hour == 0 ? "" : (hour < 10 ? "0" + hour : hour) + ":") +
+                    (min < 10 ? "0" + min : min) + ":" +
+                    (sec < 10 ? "0" + sec : sec);
+        }
     </script>
 </div>

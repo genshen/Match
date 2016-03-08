@@ -42,7 +42,7 @@
         if(result == 1){
            location.replace("index/index.html");
         }else{
-             var snackbarContainer = document.querySelector('#snackbar-container');
+             var snackbarContainer = document.querySelector('#toast-t');
              var data = {
                 message: '授权码错误',
                 timeout: 2000,
@@ -55,8 +55,4 @@
      }
     </script>
 
-    <div id="snackbar-container" class="mdl-js-snackbar mdl-snackbar">
-        <div class="mdl-snackbar__text"></div>
-        <button class="mdl-snackbar__action" type="button"></button>
-    </div>
 </div>

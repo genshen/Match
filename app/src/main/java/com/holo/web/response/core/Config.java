@@ -9,6 +9,7 @@ import com.holo.web.tools.AndroidAPI;
 public class Config {
     public final static String HOST = AndroidAPI.getLocalIp();
     public static int HttpPort = 8080;
+    public static int MAX_CONNECTION = 10;
     public final static String TempPath = FileManager.getSDPath()+"/";
     public final static long ReleaseTime = 1455549428680L;
 
@@ -27,7 +28,7 @@ public class Config {
         final static String VIEW = "core/views/";
         final static String VIEW_LAYOUT = "core/views/layout/main.html";
         final static short VIEW_LAYOUT_TOP = 3;
-        final static short VIEW_LAYOUT_HEADER = 49;
+        final static short VIEW_LAYOUT_HEADER = 53;
         final static short VIEW_LAYOUT_BREAK = 9;
     }
 

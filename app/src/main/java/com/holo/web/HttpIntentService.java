@@ -9,6 +9,8 @@ import com.holo.web.response.core.Config;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -20,6 +22,7 @@ import java.net.Socket;
 public class HttpIntentService extends IntentService {
     ServerSocket serve;
     Socket clientSocket;
+    ExecutorService fixedThreanPool = Executors.newFixedThreadPool(Config.MAX_CONNECTION);
 
     public HttpIntentService() {
         super("HttpIntentService");
@@ -42,7 +45,7 @@ public class HttpIntentService extends IntentService {
             while (!serve.isClosed()) {
                 // when run [ serve.close(); ] the Exception will happen.
                 clientSocket = serve.accept();
-                (new ServerThread(clientSocket)).start();
+                fixedThreanPool.execute(new ServerThread(clientSocket));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,6 +57,7 @@ public class HttpIntentService extends IntentService {
     public void onDestroy() {
         super.onDestroy();
         try {
+            fixedThreanPool.shutdown();
             serve.close();
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,0 +1,50 @@
+<style>
+    .grid-card-image.mdl-card {width: 255px;height: 255px;}
+    @media (min-width: 1152px) and (max-width:1300px) {
+    .grid-card-image.mdl-card {width: 220px;height: 220px !important;}
+    }
+    @media (min-width: 1024px) and (max-width:1151px) {
+      .grid-card-image.mdl-card {width: 190px;height: 190px !important;}
+    }
+    @media (min-width: 993px) and (max-width:1023px) {
+      .grid-card-image.mdl-card {width:240px;height: 240px !important;}
+    }
+    @media (min-width: 701px) and (max-width:776px) {
+    .grid-card-image.mdl-card {width: 225px;height: 225px !important;}
+    }
+    @media (min-width: 601px) and (max-width:700px) {
+       .grid-card-image.mdl-card {width: 190px;height:190px !important;}
+    }
+    @media (min-width: 425px) and (max-width:535px) {
+       .grid-card-image.mdl-card {width: 200px;height: 200px !important;}
+    }
+    @media (max-width: 425px){
+       .grid-card-image.mdl-card {width: 180px;height: 180px !important;}
+    }
+    .grid-card-image > .mdl-card__actions {height: 52px;padding: 16px;background: rgba(0, 0, 0, 0.5);}
+    .grid-card-image__filename{color: #fff;font-size: 14px;font-weight: 500;}
+
+    .mdl-card__actions a{color: #3F51B5;outline: none;}
+    .mdl-card__actions  a:focus,td a:hover{color: #3F51B5;}
+    .mdl-card__actions  a i{outline: none;font-size: 20px !important;}
+    [type="checkbox"]:checked + label:before{border-bottom-color:#3F51B5;border-right-color:#3F51B5 }
+    [type="checkbox"] + label:before{border-color: #3F51B5;}
+</style>
+<div id="app">
+    <div class="row">
+        <div class="col s6 m4 l3" v-for="img in images">
+            <div class="grid-card-image mdl-card mdl-shadow--2dp"  v-bind:style="'background: url(images/thumb/'+img.display_name+ '?id=' + img.id + ') center / cover;'">
+                <div class="mdl-card__title mdl-card--expand"></div>
+                <div class="mdl-card__actions">
+                    <input type="checkbox" id="check-{{$index}}" />
+                    <label style="vertical-align: bottom;" for="check-{{$index}}"></label>
+                    <a type="download" href="files/download/{{img.display_name}}?id={{img.id}}&type=0">
+                        <i id="download-icon-{{$index}}" class="waves-effect mdi  mdi-download"></i>
+                        <div class="mdl-tooltip" for="download-icon-{{$index}}">下载</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

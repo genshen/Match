@@ -1,0 +1,39 @@
+<div id="app">
+    <table class="striped">
+        <thead>
+        <tr>
+            <th data-field="id">名称</th>
+            <th data-field="name">大小</th>
+            <th data-field="price">Item Price</th>
+        </tr>
+        </thead>
+        <tbody id="files-table">
+
+        </tbody>
+    </table>
+
+</div>
+
+<script id="template" type="x-template">
+    <tr  v-for="file in files">
+        <td>{{file.name}}</td>
+        <td>{{file.size}}</td>
+        <td>$0.87</td>
+    </tr>
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+       getFileList("");
+    });
+
+    function getFileList(path){
+      $.get("../../files/file_list.html",{path:path}, function(result){
+        new Vue({
+          el: '#files-table',
+          replace: false,
+          data:result,
+          template: "#template"
+        })
+      },"json");
+    }
+</script>

@@ -5,6 +5,10 @@ import com.holo.web.response.core.Controller;
 import com.holo.web.response.core.ResponseHeader;
 import com.holo.web.response.core.session.HttpSession;
 import com.holo.web.tools.AndroidAPI;
+import com.holo.web.tools.data_set.MediaInfo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.OutputStream;
 
@@ -12,12 +16,42 @@ import java.io.OutputStream;
  * Created by 根深 on 2016/2/20.
  */
 public class Files extends Controller {
-    final String LOGIN = "login";
     final String FILE_TYPE = "type";
     final String FILE_ID = "id";
 
     public Files(OutputStream os, RequestHeader header, HttpSession session) {
         super(os, header, session);
+    }
+
+    public void indexAction() {
+        int login = session.getSessionInt(LOGIN);
+        if (login != 1) {
+            redirect("index", "login");
+            return;
+        }
+        JSONObject data = new JSONObject();
+        try {
+            data.put("title", "文件");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        render("files/index.html", data);
+    }
+
+    public void file_listAction() {
+        int login = session.getSessionInt(LOGIN);
+        if (login != 1) {
+            forbidden();
+            return;
+        }
+
+        JSONObject data = new JSONObject();
+        try {
+            data.put("files", AndroidAPI.getFileList());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        renderJSON(data);
     }
 
     public void uploadAction() {
@@ -42,11 +76,14 @@ public class Files extends Controller {
         }
 
         int file_type = getParams().getInt(FILE_TYPE);
-        int file_id = getParams().getInt(FILE_ID);
-        Object f[] = AndroidAPI.getMediaLocation(file_id, file_type);
-//      Content-Length
+        long file_id = getParams().getLong(FILE_ID);
+        MediaInfo mediainfo = AndroidAPI.getMediaLocation(file_id, file_type);
+        if(mediainfo.ilLegal()){ // file not exist
+            notFound();
+            return;
+        }
+        mediainfo.mime = "application/octet-stream";
         responseHead.setHeadValue(ResponseHeader.Content_Transfer_Encoding, "binary");
-        responseHead.setHeadValue(ResponseHeader.Content_Type, "application/octet-stream");
-        outFile((String)f[0]);
+        outFile(mediainfo);
     }
 }

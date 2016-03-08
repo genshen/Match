@@ -1,10 +1,11 @@
 package com.holo.web.response.controllers;
 
+import android.provider.MediaStore;
+
 import com.holo.web.request.RequestHeader;
-import com.holo.web.response.core.MediaController;
+import com.holo.web.response.core.Controller;
 import com.holo.web.response.core.session.HttpSession;
 import com.holo.web.tools.AndroidAPI;
-import com.holo.web.tools.data_set.MediaInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,12 +13,12 @@ import org.json.JSONObject;
 import java.io.OutputStream;
 
 /**
- * Created by 根深 on 2016/2/21.
+ * Created by 根深 on 2016/3/6.
  */
-public class Audio extends MediaController {
+public class Images extends Controller {
     final String ID = "id";
 
-    public Audio(OutputStream os, RequestHeader header, HttpSession session) {
+    public Images(OutputStream os, RequestHeader header, HttpSession session) {
         super(os, header, session);
     }
 
@@ -30,27 +31,21 @@ public class Audio extends MediaController {
 
         JSONObject data = new JSONObject();
         try {
-            data.put("title", "音乐");
-            data.put("musics", AndroidAPI.getMusicList());
+            data.put("title", "图片");
+            data.put("images", AndroidAPI.getImageList());
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        render("audio/index.html", data);
+        render("images/index.html", data);
     }
 
-    public void audioMedia() {
+    public void  thumbMedia(){
         int login = session.getSessionInt(LOGIN);
         if (login != 1) {
             forbidden();
             return;
         }
-
         long id = getParams().getLong(ID);
-        MediaInfo mediainfo = AndroidAPI.getMediaLocation(id, 1);
-        if (mediainfo.ilLegal()) { // file not exist
-            notFound();
-            return;
-        }
-        pullOut(mediainfo.file);
+        outThumbByOrigId(id, MediaStore.Images.Thumbnails.MINI_KIND,true);
     }
 }

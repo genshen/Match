@@ -228,7 +228,9 @@ public class ImagesSelectorFragment extends Fragment implements AdapterView.OnIt
             }
             imageLoader.displayImage("content://media/external/images/media/" + id, holder.imageView, options);
             holder.checkbox.setVisibility((boolean) images.get(position).get(CHECKED) ? View.VISIBLE : View.INVISIBLE);
-//            MediaStore.Images.Thumbnails.getThumbnail(contentResolver, id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
+//            holder.imageView.setImageBitmap(
+//                    MediaStore.Images.Thumbnails.getThumbnail(contentResolver, id, MediaStore.Images.Thumbnails.MICRO_KIND, null)
+//            );
             return convertView;
         }
 
