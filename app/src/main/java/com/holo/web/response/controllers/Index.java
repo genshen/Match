@@ -29,7 +29,7 @@ public class Index extends Controller {
         JSONObject data = new JSONObject();
         try {
             data.put("title", "首页");
-            data.put("apps", toJSON(new long[]{0, 0}));
+            data.put("apps", toJSON(AndroidAPI.getAppCount()));
             data.put("images", toJSON(AndroidAPI.getImagesCount()));
             data.put("audio", toJSON(AndroidAPI.getAudioCount()));
             data.put("video", toJSON(AndroidAPI.getVideoCount()));

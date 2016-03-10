@@ -1,0 +1,64 @@
+<style>
+    .mdl-button--fab{position:fixed;right:60px;bottom:40px;z-index:100}
+    .app-item{padding:8px;text-align:center;}
+    .app-icon img{width:100px}
+    .app-icon{padding: 10px 0;width: 100%;}
+
+    .title{color:#757575;font-size:16px;margin-bottom:5px;
+    white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 100%;display: block;}
+    .download-action{outline: none;}
+    .download-action i{outline: none;color:#757575;font-size: 20px !important;}
+</style>
+<div id="app">
+    <h5>&emsp;&emsp;安装包</h5>
+
+    <div class="row">
+        <div class="col l2 m3 s6 app-item" v-for="apk in apks">
+            <div class="app-icon waves-effect">
+                <img v-bind:src="'apps/apk_icon/'+apk.label+'.png?'id='+apk.id">
+            </div>
+            <div>
+                <span class="title">{{apk.label}}</span>
+                <a class="download-action" type="download"
+                   href="files/download/{{apk.label}}.apk?id={{apk.id}}&type=3">
+                    <i id="download-icon-apk-{{$index}}" class="waves-effect mdi  mdi-download"></i>
+                    <span for="download-icon-apk-{{$index}}">{{apk.size_show}}</span>
+                    <div class="mdl-tooltip" for="download-icon-apk-{{$index}}">下载</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <h5>&emsp;&emsp;应用<small style="color:black;font-weight: 500;opacity:1;font-size: 0.7em;">已安装</small></h5>
+
+    <div class="row">
+        <div class="col l2 m3 s6 app-item" v-for="app in apps">
+            <div class="app-icon waves-effect">
+                <img v-bind:src="'apps/app_icon/'+app.label+'.png?index='+$index">
+            </div>
+            <div>
+                <span class="title">{{app.label}}</span>
+                <a class="download-action" type="download"
+                   href="apps/download/{{app.label}}.apk?index={{$index}}">
+                    <i id="download-icon-{{$index}}" class="waves-effect mdi  mdi-download"></i>
+                    <span for="download-icon-0">{{app.size_show}}</span>
+
+                    <div class="mdl-tooltip" for="download-icon-{{$index}}">下载</div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <button data-target="bottom-modal"
+            class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored modal-trigger">
+        <i class="material-icons">add</i>
+    </button>
+</div>
+<script type="text/javascript" src="public/js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="public/js/dmuploader.min.js"></script>
+<script type="text/javascript" src="public/js/file_upload.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+   $('.modal-trigger').leanModal();
+});
+</script>

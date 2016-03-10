@@ -149,6 +149,8 @@ public class Controller {
             return;
         }
         responseHead.setHeadValue(ResponseHeader.Content_Type,"image/png");
-        bitmap.compress(Bitmap.CompressFormat.PNG,50,bos);
+        responseHead.Out(bos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
+        bitmap.recycle();
     }
 }
