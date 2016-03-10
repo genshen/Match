@@ -25,11 +25,7 @@ public class Config {
     }
 
     public class View {
-        final static String VIEW = "core/views/";
-        final static String VIEW_LAYOUT = "core/views/layout/main.html";
-        final static short VIEW_LAYOUT_TOP = 3;
-        final static short VIEW_LAYOUT_HEADER = 53;
-        final static short VIEW_LAYOUT_BREAK = 9;
+        public final static String VIEW = "core/views/";
     }
 
 }

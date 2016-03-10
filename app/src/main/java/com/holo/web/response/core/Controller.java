@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.holo.web.request.RequestHeader;
 import com.holo.web.request.data.GetData;
 import com.holo.web.request.data.PostData;
+import com.holo.web.response.core.render.HtmlRender;
+import com.holo.web.response.core.render.LayoutRender;
 import com.holo.web.response.core.session.HttpSession;
 import com.holo.web.tools.AndroidAPI;
 import com.holo.web.tools.URL;
@@ -78,6 +80,7 @@ public class Controller {
         responseHead.Out(bos);
     }
 
+    /**just rend a string to browser*/
     public void render(String i) {
         responseHead.Out(bos);
         try {
@@ -88,16 +91,14 @@ public class Controller {
         }
     }
 
-    public void renderLayout() {
+    public void render(String template,LayoutRender.Layout layout, JSONObject data) {
         responseHead.Out(bos);
-        HtmlRender html = new HtmlRender(bos);
-        html.renderLayout();
+        HtmlRender html = new HtmlRender(template,data,layout,bos);
+        html.render();
     }
 
     public void render(String template, JSONObject data) {
-        responseHead.Out(bos);
-        HtmlRender html = new HtmlRender(template, data, bos);
-        html.render();
+        render(template, LayoutRender.DEFAULT_LAYOUT, data);
     }
 
     public void renderJSON(String json) {

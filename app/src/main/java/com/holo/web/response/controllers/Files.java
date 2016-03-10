@@ -24,11 +24,11 @@ public class Files extends Controller {
     }
 
     public void indexAction() {
-//        int login = session.getSessionInt(LOGIN);
-//        if (login != 1) {
-//            redirect("index", "login");
-//            return;
-//        }
+        int login = session.getSessionInt(LOGIN);
+        if (login != 1) {
+            redirect("index", "login");
+            return;
+        }
         JSONObject data = new JSONObject();
         try {
             data.put("title", "文件");
