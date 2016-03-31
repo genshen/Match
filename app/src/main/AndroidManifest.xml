@@ -55,7 +55,20 @@
             android:exported="false" />
         <service
             android:name="com.holo.m.tcp.MessageReceiverService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".FileShareActivity"
+            android:label="@string/title_activity_file_share"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ShareFileDetail"
+            android:label="@string/title_activity_share_file_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ShareFileAddActivity"
+            android:label="@string/title_activity_share_file_add"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

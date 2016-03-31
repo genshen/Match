@@ -125,4 +125,8 @@ public class MatchDataManager {
     public void close() {
         database.close();
     }
+
+    public boolean isOpen() {
+        return match_db.isOpen();
+    }
 }

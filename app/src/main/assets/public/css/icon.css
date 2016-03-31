@@ -20,4 +20,3 @@
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
-.single-line{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 100%;display: inner-block;}

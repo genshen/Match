@@ -3,6 +3,7 @@ package com.holo.web.response.controllers;
 import com.holo.web.request.RequestHeader;
 import com.holo.web.response.core.Controller;
 import com.holo.web.response.core.session.HttpSession;
+import com.holo.web.tools.AndroidAPI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,11 +20,11 @@ public class Other extends Controller {
     }
 
     public void indexAction() {
-//        int login = session.getSessionInt(LOGIN);
-//        if (login != 1) {
-//            redirect("index", "login");
-//            return;
-//        }
+        int login = session.getSessionInt(LOGIN);
+        if (login != 1) {
+            redirect("index", "login");
+            return;
+        }
 
         JSONObject data = new JSONObject();
         try {
@@ -32,5 +33,22 @@ public class Other extends Controller {
             e.printStackTrace();
         }
         render("other/index.html", data);
+    }
+
+    public void listAction() {
+        int login = session.getSessionInt(LOGIN);
+        if (login != 1) {
+            forbidden();
+            return;
+        }
+
+        JSONObject data = new JSONObject();
+        try {
+            data.put("document", AndroidAPI.getDocumentList());
+            data.put("zip", AndroidAPI.getZipList());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        renderJSON(data);
     }
 }

@@ -37,6 +37,25 @@ public class MatchData extends SQLiteOpenHelper {
             "file_state integer," +      //状态 等待传输 正在传输 传输完成 已经删除 传输失败
             "remark varchar)";    //备注
 
+    String SQL_CREATE_FILE_SHARE_RECORD = "create table file_share_record (_id integer PRIMARY KEY AUTOINCREMENT," +
+            "title varchar," +        //分享名
+            "file_hash varchar," +        //hash
+            "author varchar," +        //作者
+            "modify_time integer," +       //最近一次分享时间
+            "create_time integer," +       //创建时间
+            "file_count integer," +     //文件数目
+            "all_size integer," +     //文件总大小
+            "describe varchar)";     //分享说明
+
+    String SQL_CREATE_FILE_SHARE_DETAIL_RECORD = "create table file_share_detail (_id integer PRIMARY KEY AUTOINCREMENT," +
+            "parent_id integer," +    //父id
+            "title varchar," +        //文件名
+            "file_hash varchar," +     //文件名hash
+            "time integer," +         //分享时间
+            "data varchar," +        //文件路径
+            "file_size integer," +     //文件大小
+            "type integer)";     //文件类型
+
     public MatchData(Context context, int version) {
         super(context, DATABASE_NAME, null, version);
     }
@@ -45,6 +64,8 @@ public class MatchData extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_CHAT_RECORD);
         db.execSQL(SQL_CREATE_FILE_RECORD);
+        db.execSQL(SQL_CREATE_FILE_SHARE_RECORD);
+        db.execSQL(SQL_CREATE_FILE_SHARE_DETAIL_RECORD);
     }
 
     @Override

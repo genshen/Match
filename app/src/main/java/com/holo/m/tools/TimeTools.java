@@ -24,7 +24,10 @@ public class TimeTools {
     }
 
     public static String getShowAbleDate(Object obj) {
-        long time = (Long.valueOf(obj.toString())) * 1000;
+        return getShowAbleDate((Long.valueOf(obj.toString())) * 1000);
+    }
+
+    public static String getShowAbleDate(long time) {
         long time_now = (new Date()).getTime();
 
         long difference = time_now - time;

@@ -7,6 +7,7 @@ import com.holo.web.response.core.session.HttpSession;
 import com.holo.web.tools.AndroidAPI;
 import com.holo.web.tools.data_set.MediaInfo;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,11 +45,14 @@ public class Files extends Controller {
             forbidden();
             return;
         }
-
+        JSONArray jsonArr = AndroidAPI.getFileList(getParams().getString("path"));
+        if (jsonArr == null) {
+            notFound();
+            return;
+        }
         JSONObject data = new JSONObject();
-        String path = getParams().getString("path");
         try {
-            data.put("files", AndroidAPI.getFileList(path));
+            data.put("files", jsonArr);
         } catch (JSONException e) {
             e.printStackTrace();
         }

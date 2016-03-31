@@ -5,11 +5,13 @@
 
     <!---Activity-->
     <string name="title_activity_chat">ChatActivity</string>
-    <string name="title_activity_web">WebActivity</string>
+    <string name="title_activity_web">Web版</string>
     <string name="title_activity_file_selector">FileSelector</string>
     <string name="title_activity_file_record">传输记录</string>
     <!---Activity-->
-
+    <!--alert dialog -->
+    <string name="alert_cancel">取消</string>
+    <!--alert dialog -->
     <string name="inti_fail_port_used">初始化失败,相关端口已经被占用</string>
 
     <!--chat activity-->
@@ -52,8 +54,25 @@
     <string name="open_web_browser">请在PC浏览器中打开:</string>
     <string name="http_address">http://%s:8080</string>
     <!--/Web-->
+    <!--文件共享-->
+    <string name="file_share">文件共享</string>
+    <string name="alert_title_add_file_share">新建共享</string>
+    <string name="alert_add_file_share_sure">创建</string>
+    <string name="share_file_no_title">新建共享时,标题不能为空.</string>
+    <string name="no_shared_file_found">你目前还没有共享文件哦</string>
+    <!--文件共享-->
+    <!--文件共享详情-->
+    <string name="share_file_detail_new">点击加号按钮添加共享文件</string>
+    <string name="share_resource_not_found">未找到共享记录</string>
+    <!--文件共享详情-->
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_file_share">文件共享</string>
+    <string name="file_share_edit_title">名称</string>
+    <string name="file_share_edit_describe">描叙</string>
+    <string name="title_activity_share_file_detail">ShareFileDetail</string>
+    <string name="large_text">j</string>
+    <string name="title_activity_share_file_add">添加共享文件</string>
 
 </resources>

@@ -84,7 +84,11 @@ public class ChatActivity extends AppCompatActivity implements TextWatcher, UdpR
     @Override
     protected void onResume() {
         super.onResume();
+        if (!chat_manager.isOpen()) { // re open db
+            chat_manager = new MatchDataManager(this);
+        }
         chatAdapter.notifyDataSetChanged();
+
     }
 
     @Override

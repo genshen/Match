@@ -257,7 +257,7 @@ public class AndroidAPI {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 HashMap<String, Object> list_item = new HashMap<>();
-                list_item.put(ID, cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)));
+                list_item.put(ID, cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)));
                 list_item.put("label", cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.TITLE)));
                 long size = cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns.SIZE));
                 list_item.put(SIZE_SHOW, FileInfo.getFileSize(size));
@@ -282,7 +282,7 @@ public class AndroidAPI {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 HashMap<String, Object> list_item = new HashMap<>();
-                list_item.put(ID, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media._ID)));
+                list_item.put(ID, cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID)));
                 list_item.put(DISPLAY_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
 //                list_item.put(MediaStore.Images.Media.DATA, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
                 long size = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.SIZE));
@@ -308,7 +308,7 @@ public class AndroidAPI {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 HashMap<String, Object> list_item = new HashMap<>();
-                list_item.put(ID, cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
+                list_item.put(ID, cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
                 list_item.put(TITLE, cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
                 list_item.put(DISPLAY_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)));
                 list_item.put(ARTIST, cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
@@ -323,7 +323,6 @@ public class AndroidAPI {
         return new JSONArray(music_list);
     }
 
-
     public static JSONArray getVideoList() {
         Cursor cursor = contentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null,
                 "duration > 30000", null, MediaStore.Video.Media.DISPLAY_NAME);
@@ -332,7 +331,7 @@ public class AndroidAPI {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 HashMap<String, Object> list_item = new HashMap<>();
-                list_item.put(ID, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media._ID)));
+                list_item.put(ID, cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media._ID)));
                 list_item.put(TITLE, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.TITLE)));
                 list_item.put(DISPLAY_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME)));
                 list_item.put(ARTIST, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.ARTIST)));
@@ -347,6 +346,42 @@ public class AndroidAPI {
         return new JSONArray(video_list);
     }
 
+    public static JSONArray getDocumentList(){
+        Cursor cursor = contentResolver.query(MediaStore.Files.getContentUri("external"), null, DOC_SELECTION, null, null);
+        List<Map<String, Object>> document_list = new ArrayList<>();
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                HashMap<String, Object> list_item = new HashMap<>();
+                // todo DISPLAY_NAME returns null!
+                list_item.put(ID, cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)));
+                list_item.put(DISPLAY_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME)));
+                list_item.put(SIZE_SHOW,cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns.SIZE)));
+                document_list.add(list_item);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return new JSONArray(document_list);
+    }
+
+    public static JSONArray getZipList(){
+        Cursor cursor = contentResolver.query(MediaStore.Files.getContentUri("external"), null, ZIP_SELECTION, null, null);
+        List<Map<String, Object>> zip_list = new ArrayList<>();
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                HashMap<String, Object> list_item = new HashMap<>();
+                list_item.put(ID, cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)));
+                list_item.put(DISPLAY_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME)));
+                list_item.put(SIZE_SHOW,cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns.SIZE)));
+                zip_list.add(list_item);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return new JSONArray(zip_list);
+    }
     /**
      * @param origId  origId in images table
      * @param kind    MINI_KIND or MICRO_KIND
@@ -392,8 +427,17 @@ public class AndroidAPI {
     static final String IS_DIR = "is_dir";
     //    final String FILE_ICON = "icon";
 
+    /**
+     *
+     * @param path
+     * @return return null if the file folder not exists!
+     */
     public static JSONArray getFileList(String path) {
-        return new JSONArray(getFileChildren(new File(SD_ROOT_DIR + path)));
+        File file = new File(SD_ROOT_DIR + path);
+        if(!file.exists()){
+            return null;
+        }
+        return new JSONArray(getFileChildren(file));
     }
 
     private static List<Map<String, Object>> getFileChildren(File dir) {

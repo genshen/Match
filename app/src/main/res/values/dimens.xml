@@ -42,4 +42,12 @@
     <dimen name="file_selector_files_icon_margin">5dp</dimen>
     <dimen name="file_selector_files_right_margin">12dp</dimen>
     <!--/FileSelector-->
+
+    <!--file share-->
+    <dimen name="dialog_padding_horizontal">6dp</dimen>
+    <dimen name="file_share_item_padding">16dp</dimen>
+    <dimen name="file_share_icon_width">46dp</dimen>
+    <!--file share -->
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

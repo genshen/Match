@@ -1,24 +1,121 @@
 <style>
     .tabs{ overflow: hidden;} /*don't show the scroll bar while there are only tabs*/
+    .mdl-button--fab{position:fixed;right:60px;bottom:40px;z-index:100}
+    .file-icon{width:50px;height:50px;}
+    #spinner{position:fixed;left:50%;top:50%;}
+
+    td {padding: 5px 15px;}td i{font-size: 18px !important;}
 </style>
 <div id="app">
     <div class="row">
         <div class="col s12">
             <ul class="tabs">
-                <li class="tab col s6"><a href="#document">文档</a></li>
-                <li class="tab col s6"><a href="#zip">压缩包</a></li>
+                <li class="tab col s6"><a href="#document-tab">文档</a></li>
+                <li class="tab col s6"><a href="#zip-tab">压缩包</a></li>
             </ul>
         </div>
-        <div id="document" class="col s12">
-            文档
+        <div id="document-tab" class="col s12">
+
         </div>
-        <div id="zip" class="col s12">
-            压缩包
+        <div id="zip-tab" class="col s12">
+
         </div>
     </div>
 
+    <div id="spinner" class="mdl-spinner mdl-js-spinner"></div>
     <button data-target="bottom-modal" style="position:fixed;right:60px;bottom:40px;z-index:100"
             class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored modal-trigger">
         <i class="material-icons">add</i>
     </button>
+
+    <script id="document-template" type="x-template">
+        <table class="striped">
+            <tbody>
+            <tr  v-for="doc in document">
+                <td>
+                    <a v-else type="download" title="下载" href="files/download/{{doc.display_name}}?id={{doc.id}}&type=3">
+                        <img v-bind:src="'public/images/'+doc.icon"  class="file-icon">
+                        {{doc.display_name}}
+                    </a>
+                </td>
+                <td>
+                    <a v-else type="download"  class="waves-effect-link" title="下载" href="files/download/{{doc.display_name}}?id={{doc.id}}&type=3">
+                        <i id="download-icon-doc-{{$index}}" class="waves-effect mdi mdi-download"></i>
+                    </a>
+                </td>
+                <td>{{doc.size}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </script>
+
+    <script id="zip-template" type="x-template">
+        <table class="striped">
+            <tbody>
+                 <tr  v-for="z in zip">
+                    <td>
+                        <a v-else type="download" title="下载" href="files/download/{{z.display_name}}?id={{z.id}}&type=3">
+                            <img v-bind:src="'public/images/'+z.icon"  class="file-icon">
+                            {{z.display_name}}
+                        </a>
+                    </td>
+                    <td>
+                        <a v-else type="download"  class="waves-effect-link" title="下载" href="files/download/{{z.display_name}}?id={{z.id}}&type=3">
+                            <i id="download-icon-z-{{$index}}" class="waves-effect mdi mdi-download"></i>
+                        </a>
+                    </td>
+                    <td>{{z.size}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </script>
 </div>
+<script type="text/javascript" src="public/js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="public/js/dmuploader.min.js"></script>
+<script type="text/javascript" src="public/js/file_upload.js"></script>
+<script type="text/javascript" src="public/js/file_helper.js"></script>
+<script type="text/javascript">
+     var loadSpinner,all_files;
+     $(document).ready(function(){
+        $('.modal-trigger').leanModal();
+        loadSpinner = $("#spinner");
+        loadSpinner.addClass("is-active");
+        $.ajax({url:"../../other/list.html",dataType:"json",
+              success:function(result){
+                  all_files = processResult(result);
+                  new Vue({
+                    el: '#document-tab',
+                    replace: false,
+                    data:all_files,
+                    template: "#document-template"
+                  });
+                  new Vue({
+                    el: '#zip-tab',
+                    replace: false,
+                    data:all_files,
+                    template: "#zip-template"
+                  });
+              },
+              error:function(){
+                  Toast("数据请求错误!");
+              },
+              complete:function(){
+                 loadSpinner.removeClass("is-active");
+              }
+          });
+     });
+
+     function processResult(jsonData){
+          for(var key in jsonData.document){
+            jsonData.document[key].display_name = "big.doc";
+            jsonData.document[key].icon = getFileIcon(jsonData.document[key].display_name);
+            jsonData.document[key].size = uniformFileSize(jsonData.document[key].size_show);
+          }
+          for(var key in jsonData.zip){
+            jsonData.zip[key].display_name = "bif.zip";
+            jsonData.zip[key].icon = getFileIcon(jsonData.zip[key].display_name);
+            jsonData.zip[key].size = uniformFileSize(jsonData.zip[key].size_show);
+          }
+          return jsonData;
+     }
+</script>

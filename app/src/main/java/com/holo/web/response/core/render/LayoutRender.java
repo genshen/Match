@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 public class LayoutRender {
     /*you can add other layout here,just like DEFAULT_LAYOUT */
     public final static Layout DEFAULT_LAYOUT = new Layout("core/views/layout/main.html", new int[]{3, 53, 9});
+    public final static Layout SHARE_LAYOUT = new Layout("core/views/layout/share.html", new int[]{3, 18, 8});
     final static byte[] newline = {'\r', '\n'};
     int which = 0;
     Layout layout;

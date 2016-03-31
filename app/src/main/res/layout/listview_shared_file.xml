@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/file_share_item_padding">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/file_share_icon"
+        android:layout_width="@dimen/file_share_icon_width"
+        android:layout_height="@dimen/file_share_icon_width"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="6dp"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/ic_file_share"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/share_file_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/file_share_icon"
+        android:layout_toEndOf="@+id/file_share_icon"
+        android:singleLine="true"
+        android:ellipsize="middle"
+        android:textSize="18sp"
+        android:textColor="@android:color/black" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/share_file_describe"
+        android:layout_below="@+id/share_file_title"
+        android:layout_toRightOf="@+id/file_share_icon"
+        android:layout_toEndOf="@+id/file_share_icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textColor="@color/share_file_describe_color"/>
+</RelativeLayout>

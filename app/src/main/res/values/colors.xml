@@ -21,5 +21,12 @@
     <!--File Record-->
     <color name="file_record_background">#EEEEEE</color>
     <!--File Record-->
+    <!--fab color-->
+    <color name="normal_fab_background">#D93226</color>
+    <color name="normal_fab_ripple">#D95437</color>
+    <!--fab color-->
+    <!--file share -->
+    <color name="share_file_describe_color">#313335</color>
+    <!--file share -->
 
 </resources>

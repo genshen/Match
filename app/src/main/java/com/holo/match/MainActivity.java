@@ -59,6 +59,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 startActivity(intent);
             }
         });
+        FloatingActionButton fab_share = (FloatingActionButton) findViewById(R.id.float_action_item_file_share);
+        fab_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, FileShareActivity.class);
+                startActivity(intent);
+            }
+        });
 
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         init();
