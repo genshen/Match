@@ -1,5 +1,7 @@
 package com.holo.match;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import com.holo.m.data.FileShareData;
 import com.holo.m.files.BasicFileInformation;
 import com.holo.m.files.FileInfo;
 import com.holo.m.tools.TimeTools;
+import com.holo.m.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,7 @@ import java.util.Map;
 public class ShareFileDetail extends AppCompatActivity {
     ArrayList<Map<String, Object>> shareFileList = new ArrayList<>();
     SharedFileAdapter sharedFileAdapter;
+    FloatingActionButton fab;
     long id;
 
     @Override
@@ -36,7 +41,7 @@ public class ShareFileDetail extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,7 +49,7 @@ public class ShareFileDetail extends AppCompatActivity {
                 startActivityForResult(intent, 200);
             }
         });
-        init(fab);
+        init();
     }
 
     @Override
@@ -63,17 +68,28 @@ public class ShareFileDetail extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_share_file_detail, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.setting_file_share_copy_url:
+                ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                clip.setText(getString(R.string.http_address, Tools.getLocalHostIp()) + "/share/index.html?id=" + 1 + "&h=" + "Aaeds2s32"); // todo
+                Snackbar.make(fab, R.string.haveCopied, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void init(View fab) {
+    private void init() {
         id = getIntent().getLongExtra("id", 0);
         boolean isNew = getIntent().getBooleanExtra("isNew", false);
         if (isNew) {

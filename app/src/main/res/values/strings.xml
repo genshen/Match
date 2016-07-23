@@ -53,6 +53,7 @@
     <string name="computer">Web版</string>
     <string name="open_web_browser">请在PC浏览器中打开:</string>
     <string name="http_address">http://%s:8080</string>
+    <string name="auth_code">授权码:%s</string>
     <!--/Web-->
     <!--文件共享-->
     <string name="file_share">文件共享</string>
@@ -62,11 +63,12 @@
     <string name="no_shared_file_found">你目前还没有共享文件哦</string>
     <!--文件共享-->
     <!--文件共享详情-->
+    <string name="haveCopied">共享链接已复制</string>
+    <string name="setting_file_share_copy_url">复制共享链接</string>
     <string name="share_file_detail_new">点击加号按钮添加共享文件</string>
     <string name="share_resource_not_found">未找到共享记录</string>
     <!--文件共享详情-->
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_file_share">文件共享</string>
     <string name="file_share_edit_title">名称</string>

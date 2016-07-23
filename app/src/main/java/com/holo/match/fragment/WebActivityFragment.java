@@ -22,7 +22,7 @@ public class WebActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_web, container, false);
         address = (AppCompatTextView) rootView.findViewById(R.id.http_address);
         AppCompatTextView code = (AppCompatTextView) rootView.findViewById(R.id.code);
-        code.setText(AndroidAPI.newCode());
+        code.setText(getString(R.string.auth_code, AndroidAPI.newCode()));
         return rootView;
     }
 

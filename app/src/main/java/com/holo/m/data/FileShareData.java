@@ -97,7 +97,7 @@ public class FileShareData {
         return match_db.insert(RESOURCE_SHARE.TABLE_NAME, null, value);
     }
 
-    private String generateHash() {
+    private String generateHash() {  //todo
         return "Aaeds2s32";
     }
 

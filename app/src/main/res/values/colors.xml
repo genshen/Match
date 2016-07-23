@@ -28,5 +28,7 @@
     <!--file share -->
     <color name="share_file_describe_color">#313335</color>
     <!--file share -->
-
+    <!--web fragment -->
+    <color name="web_background">#3F51B5</color>
+    <!--web fragment -->
 </resources>
